@@ -42,8 +42,9 @@ const Reading = {
     const list = el("div", { class: "set-list" });
     if (!sets.length) {
       list.appendChild(el("div", { class: "empty-card" }, [
-        el("p", { text: "이 레벨의 문제는 준비 중이에요." }),
-        el("p", { class: "muted", text: "노션의 변형/엘리트 자료를 동일한 형식으로 추가하면 바로 나타납니다." })
+        el("p", { text: `${lv.badge || ""} ${lv.name} 독해 세트는 준비 중이에요.` }),
+        el("p", { class: "muted", text: "이 난도의 문제는 지금 ‘유형별 훈련’에서 빈칸·순서·어법·어휘별로 골라 풀 수 있어요." }),
+        el("button", { class: "primary-btn", text: "🔥 유형별 훈련으로 가기", onclick: () => Router.go("drill") })
       ]));
     }
     sets.forEach(s => {

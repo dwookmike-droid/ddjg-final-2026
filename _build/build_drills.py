@@ -24,7 +24,7 @@ def group_of(stem):
     if "순서" in s or "배열" in s: return "순서·삽입"
     if "위치" in s or "들어가기" in s or ("문장" in s and "들어갈" in s): return "순서·삽입"
     if "어법" in s or "어색" in s: return "어법"
-    if "낱말" in s or "어휘" in s or "문맥" in s: return "어휘"
+    if "낱말" in s or "어휘" in s or "문맥" in s or "쓰임" in s: return "어휘"
     if "일치" in s: return "내용일치"
     if "주제" in s or "요지" in s or "제목" in s or "주장" in s or "목적" in s or "요약" in s: return "주제·요지"
     if "함축" in s or "의미하는" in s: return "어휘"
