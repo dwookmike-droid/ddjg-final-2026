@@ -364,7 +364,7 @@ const Mock = {
       el("div", { class: "res-score" }, [el("span", { class: "res-num", text: earned.toFixed(1) }), el("span", { class: "res-of", text: ` / ${max.toFixed(1)}점` })]),
       el("div", { class: "res-pct" + (grade <= 3 ? " pass" : ""), text: `${pct}점 · 예상 ${grade}등급` }),
       el("div", { class: "res-meta", text: `정답 ${correct}/${p.qs.length} · 소요 ${fmtTime(result.duration)}` }),
-      API.enabled ? el("div", { class: "res-send", text: "📤 결과를 선생님 카톡으로 전송했어요." }) : el("div", { class: "res-send warn", text: "ⓘ 로컬 모드 — 카톡 전송은 백엔드 연결 후" }),
+      API.enabled ? el("div", { class: "res-send", text: "✅ 결과가 선생님께 기록됐어요." }) : el("div", { class: "res-send warn", text: "ⓘ 로컬 모드 — 결과는 이 기기에만 저장돼요." }),
       el("button", { class: "primary-btn", text: "오답 · 해설 보기 ▼", onclick: () => { close(); this._review(); } })
     ]);
     const close = showSheet(node);

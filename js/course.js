@@ -1,6 +1,6 @@
 /* ===========================================================
  *  course.js — 선형 학습 코스 (이전/다음으로 쭉 이어가기)
- *  흐름: 구간 인트로 → 단어 플래시카드 → 미니 퀴즈 → 지문 → 지문 문제 → 구간 완료(카톡 전송)
+ *  흐름: 세트 인트로 → 단어 플래시카드 → 미니 퀴즈 → 지문 → 지문 문제 → 세트 완료(결과 기록)
  * =========================================================== */
 
 /* ---------- 앱 셸 (헤더 / 본문 / 하단 이전·다음) ---------- */
@@ -370,7 +370,7 @@ const Course = {
       el("div", { class: "cp-title", text: `${sec.label} 세트 완료!` }),
       res.total ? el("div", { class: "cp-score" }, [el("b", { text: `${res.correct}/${res.total}` }), el("span", { class: "cp-pct" + (pass ? " pass" : ""), text: ` · ${res.pct}점` })]) : el("div", { class: "muted", text: "이 세트엔 퀴즈가 없어요." }),
       bd && bd.length > 1 ? el("div", { class: "cp-breakdown", text: bd.map(b => `${b.label} ${b.correct}/${b.total}`).join("  ·  ") }) : null,
-      el("div", { class: "cp-send", id: "cp-send", text: API.enabled ? "📤 결과를 선생님 카톡으로 전송 중…" : "ⓘ 로컬 모드 — 카톡 전송은 백엔드 연결 후" }),
+      el("div", { class: "cp-send", id: "cp-send", text: API.enabled ? "📤 결과 저장 중…" : "ⓘ 로컬 모드 — 결과는 이 기기에만 저장돼요." }),
       this.idx < this.steps.length - 1 ? el("p", { class: "muted", text: "‘다음 세트 →’으로 계속 이어가요." }) : el("p", { class: "muted", text: "모든 세트를 끝냈어요! 수고했어요 👏" })
     ]));
     if (res.total && !this.submitted[step.sec]) {
@@ -384,8 +384,8 @@ const Course = {
       };
       API.submit(result).then(r => {
         const e2 = $("#cp-send");
-        if (e2) e2.textContent = !API.enabled ? "ⓘ 로컬 모드 — 카톡 전송은 백엔드 연결 후"
-          : (r && r.ok ? "✅ 선생님 카톡으로 전송했어요." : "⚠️ 전송 대기 중(네트워크 복구 시 자동 전송).");
+        if (e2) e2.textContent = !API.enabled ? "ⓘ 로컬 모드 — 결과는 이 기기에만 저장돼요."
+          : (r && r.ok ? "✅ 결과가 선생님께 기록됐어요." : "⚠️ 저장 대기 중(네트워크 복구 시 자동 전송).");
       });
     }
   },

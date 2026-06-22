@@ -116,8 +116,8 @@ const Results = {
       el("div", { class: "res-sec", text: result.section }),
       el("div", { class: "res-meta", text: `소요 ${fmtTime(result.duration)} · ${pass ? "통과" : "복습 권장"}` }),
       API.enabled
-        ? el("div", { class: "res-send", text: "📤 결과를 선생님 카톡으로 전송했어요." })
-        : el("div", { class: "res-send warn", text: "ⓘ 로컬 모드 — 카톡 전송은 백엔드 연결 후 작동해요." }),
+        ? el("div", { class: "res-send", text: "✅ 결과가 선생님께 기록됐어요." })
+        : el("div", { class: "res-send warn", text: "ⓘ 로컬 모드 — 결과는 이 기기에만 저장돼요." }),
       result.wrong && result.wrong.length
         ? el("details", { class: "res-wrong" }, [
             el("summary", { text: `틀린 문항 ${result.wrong.length}개 보기` }),
