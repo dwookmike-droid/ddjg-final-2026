@@ -265,6 +265,20 @@ const Home = {
       el("span", { class: "rec-label", text: "추천 다음 학습" }),
       el("span", { class: "rec-text", text: rec[0] })
     ]));
+
+    // 세트별 결과(누적, 최신순)
+    const results = (pg.results || []).slice().reverse();
+    if (results.length) {
+      root.appendChild(el("h3", { class: "mt", text: "세트별 결과" }));
+      root.appendChild(el("div", { class: "res-hist" }, results.slice(0, 20).map(r => {
+        const passed = (r.pct || 0) >= CONFIG.PASS_PCT;
+        return el("div", { class: "res-hist-row" }, [
+          el("span", { class: "rh-sec", text: String(r.section || "").replace(/^코스 · /, "") }),
+          el("span", { class: "rh-score", text: `${r.score}/${r.total}` }),
+          el("span", { class: "rh-pct" + (passed ? " pass" : ""), text: `${r.pct}점` })
+        ]);
+      })));
+    }
   },
   _tile(emoji, title, sub, view, color) {
     return el("button", { class: "module-tile " + color, onclick: () => Router.go(view) }, [

@@ -118,12 +118,15 @@ const Menu = {
 function openSub(title, renderFn) { App.enterSub(title); App.main.innerHTML = ""; renderFn(App.main); }
 
 /* ---------- 코스 ---------- */
+const COURSE_VER = 2;   // 코스 구조 버전(바뀌면 진도 인덱스 리셋)
 const Course = {
   steps: [], sections: [], idx: 0, ans: {}, submitted: {}, secStart: {}, BATCH: 8,
 
   start() {
     this.build();
-    this.idx = Math.min(Store.state.progress.courseIdx || 0, this.steps.length - 1);
+    const pg = Store.state.progress;
+    if (pg.courseVer !== COURSE_VER) { pg.courseIdx = 0; pg.courseDone = {}; pg.courseVer = COURSE_VER; Store.save(); }
+    this.idx = Math.min(pg.courseIdx || 0, this.steps.length - 1);
     App.enterCourse();
     this.render();
   },
@@ -132,53 +135,48 @@ const Course = {
     if (this.steps.length) return;
     const order = ["txt4", "txt5", "oly13", "oly15", "oly17", "oly19"];
     const decks = order.map(id => Data.vocab.decks.find(d => d.id === id)).filter(Boolean);
-    const SEC_BATCHES = 3;   // 한 구간 = 8단어×3배치 ≈ 24단어 (끝나면 카톡 전송)
     decks.forEach(deck => {
       const pool = deck.passages.flatMap(p => p.words).filter(w => w.en && w.ko);
-      // 8개씩 배치로 자르고, 3배치씩 묶어 '구간'으로
-      const batches = [];
-      for (let i = 0; i < pool.length; i += this.BATCH) batches.push(pool.slice(i, i + this.BATCH));
-      const partN = Math.ceil(batches.length / SEC_BATCHES);
-      for (let b = 0, part = 1; b < batches.length; b += SEC_BATCHES, part++) {
-        const secIdx = this.sections.length;
-        const label = partN > 1 ? `${deck.label} (${part}/${partN})` : deck.label;
-        const start = this.steps.length;
-        this.push({ type: "intro", sec: secIdx, label });
-        batches.slice(b, b + SEC_BATCHES).forEach(batch => {
-          batch.forEach(w => this.push({ type: "flash", sec: secIdx, word: w }));
-          sample(batch, Math.min(3, batch.length)).forEach(w =>
-            this.push({ type: "quiz", sec: secIdx, q: this.mcq(w, pool) }));
-        });
-        this.push({ type: "checkpoint", sec: secIdx });
-        this.sections.push({ label, deck: deck.id, kind: "vocab", short: partN > 1 ? `단어 ${part}/${partN}` : "단어", start, end: this.steps.length });
-      }
-      // 본문 빈칸 구간 (해당 강 cloze 문항이 있을 때)
-      this._bankSection(deck, "cloze", `${deck.label} 본문 빈칸`, "cloze");
-      // 독해 세트는 각각 별도 구간
-      Data.reading.sets.filter(rs => rs.source === deck.label).forEach((rs, ri) => {
+      // ── 세트 1: 단어 (강 전체를 한 세트로, 끝에 결과 1회) ──
+      if (pool.length) {
         const secIdx = this.sections.length, start = this.steps.length;
-        const label = `${deck.label} 독해`;
-        this.push({ type: "intro", sec: secIdx, label, reading: true });
-        rs.passages.forEach(p => this.push({ type: "rpassage", sec: secIdx, set: rs, p }));
-        rs.questions.forEach(q => this.push({ type: "rquiz", sec: secIdx, set: rs, q }));
+        this.push({ type: "intro", sec: secIdx, label: `${deck.label} 단어`, n: pool.length });
+        for (let i = 0; i < pool.length; i += this.BATCH) {
+          const batch = pool.slice(i, i + this.BATCH);
+          batch.forEach(w => this.push({ type: "flash", sec: secIdx, word: w }));
+          sample(batch, Math.min(3, batch.length)).forEach(w => this.push({ type: "quiz", sec: secIdx, q: this.mcq(w, pool) }));
+        }
         this.push({ type: "checkpoint", sec: secIdx });
-        this.sections.push({ label, deck: deck.id, kind: "reading", short: `독해 ${ri + 1} · ${rs.level}`, start, end: this.steps.length });
-      });
-      // 유형별 드릴 구간 (해당 강 태그 문항이 있을 때)
-      this._bankSection(deck, "drill", `${deck.label} 유형 훈련`, "drill");
+        this.sections.push({ label: `${deck.label} 단어`, deck: deck.id, kind: "vocab", short: "단어", start, end: this.steps.length });
+      }
+      // ── 세트 2: 독해·문제 (본문빈칸 → 독해 → 유형, 끝에 결과 1회) ──
+      {
+        const secIdx = this.sections.length, start = this.steps.length;
+        let added = this._stageBank(deck, "cloze", secIdx);
+        Data.reading.sets.filter(rs => rs.source === deck.label).forEach(rs => {
+          this.push({ type: "intro", sec: secIdx, label: `${deck.label} 독해`, reading: true, n: rs.passages.length });
+          rs.passages.forEach(p => this.push({ type: "rpassage", sec: secIdx, set: rs, p }));
+          rs.questions.forEach(q => this.push({ type: "rquiz", sec: secIdx, set: rs, q }));
+          added = true;
+        });
+        if (this._stageBank(deck, "drill", secIdx)) added = true;
+        if (added) {
+          this.push({ type: "checkpoint", sec: secIdx });
+          this.sections.push({ label: `${deck.label} 독해·문제`, deck: deck.id, kind: "mix", short: "독해·문제", start, end: this.steps.length });
+        }
+      }
     });
   },
-  _bankSection(deck, track, label, kind) {
-    if (typeof Bank === "undefined" || !Bank.data) return;
+  // 세트 내부의 한 stage(본문빈칸/유형)만 push — 체크포인트·섹션은 안 만듦. 추가했으면 true.
+  _stageBank(deck, track, secIdx) {
+    if (typeof Bank === "undefined" || !Bank.data) return false;
     let items = Bank.items(track).filter(i => i.unit === deck.label);
-    if (!items.length) return;
-    const cap = kind === "drill" ? 8 : 12;          // 코스 구간은 표본만(전체는 메뉴에서)
+    if (!items.length) return false;
+    const cap = track === "drill" ? 8 : 12;          // 코스는 표본만(전체는 메뉴에서)
     if (items.length > cap) items = sample(items, cap);
-    const secIdx = this.sections.length, start = this.steps.length;
-    this.push({ type: "intro", sec: secIdx, label, kind });
+    this.push({ type: "intro", sec: secIdx, label: track === "cloze" ? `${deck.label} 본문 빈칸` : `${deck.label} 유형 훈련`, kind: track, n: items.length });
     items.forEach(it => this.push({ type: "qitem", sec: secIdx, item: it }));
-    this.push({ type: "checkpoint", sec: secIdx });
-    this.sections.push({ label, deck: deck.id, kind, short: kind === "cloze" ? "본문 빈칸" : "유형 훈련", start, end: this.steps.length });
+    return true;
   },
   push(step) { step._i = this.steps.length; this.steps.push(step); },
 
@@ -218,7 +216,7 @@ const Course = {
     // 하단 버튼
     App.prevBtn.disabled = this.idx === 0;
     App.nextBtn.classList.toggle("hidden", step.type === "checkpoint" && this.idx === this.steps.length - 1);
-    App.nextBtn.innerHTML = (this.idx === this.steps.length - 1) ? "끝 ✓" : (step.type === "checkpoint" ? "다음 구간 →" : "다음 →");
+    App.nextBtn.innerHTML = (this.idx === this.steps.length - 1) ? "끝 ✓" : (step.type === "checkpoint" ? "다음 세트 →" : "다음 →");
     host.scrollTo(0, 0); window.scrollTo(0, 0);
   },
 
@@ -226,9 +224,9 @@ const Course = {
   _intro(step, host) {
     const sec = this.sections[step.sec];
     const slice = this.steps.slice(sec.start, sec.end);
-    const wordN = slice.filter(s => s.type === "flash").length;
-    const rN = slice.filter(s => s.type === "rpassage").length;
-    const qN = slice.filter(s => s.type === "qitem").length;
+    const wordN = step.n ?? slice.filter(s => s.type === "flash").length;
+    const rN = step.n ?? slice.filter(s => s.type === "rpassage").length;
+    const qN = step.n ?? slice.filter(s => s.type === "qitem").length;
     let emoji = "📘", sub = `단어 ${wordN}개`, desc = "다음을 눌러 단어부터 차근차근 이어가요. 단어 카드는 눌러서 뜻·발음을 확인하세요.";
     if (step.kind === "cloze") { emoji = "✍️"; sub = `본문 빈칸 ${qN}문항`; desc = "본문을 떠올리며 빈칸에 알맞은 말을 넣어요."; }
     else if (step.kind === "drill") { emoji = "🔥"; sub = `유형 문제 ${qN}문항`; desc = "약한 유형을 집중적으로 풀어요. 틀리면 바로 해설을 봐요."; }
@@ -366,12 +364,14 @@ const Course = {
     if (!pg.courseDone[step.sec]) { pg.courseDone[step.sec] = 1; Store.save(); }   // 구간 완료(체크포인트 도달)
     const res = this.sectionResult(step.sec);
     const pass = res.pct >= CONFIG.PASS_PCT;
+    const bd = sec.kind === "mix" ? this.sectionBreakdown(step.sec) : null;
     host.appendChild(el("div", { class: "step-card checkpoint" }, [
       el("div", { class: "cp-emoji", text: pass ? "🎉" : (res.total ? "💪" : "✅") }),
-      el("div", { class: "cp-title", text: `${sec.label} 구간 완료!` }),
-      res.total ? el("div", { class: "cp-score" }, [el("b", { text: `${res.correct}/${res.total}` }), el("span", { class: "cp-pct" + (pass ? " pass" : ""), text: ` · ${res.pct}점` })]) : el("div", { class: "muted", text: "이 구간엔 퀴즈가 없어요." }),
+      el("div", { class: "cp-title", text: `${sec.label} 세트 완료!` }),
+      res.total ? el("div", { class: "cp-score" }, [el("b", { text: `${res.correct}/${res.total}` }), el("span", { class: "cp-pct" + (pass ? " pass" : ""), text: ` · ${res.pct}점` })]) : el("div", { class: "muted", text: "이 세트엔 퀴즈가 없어요." }),
+      bd && bd.length > 1 ? el("div", { class: "cp-breakdown", text: bd.map(b => `${b.label} ${b.correct}/${b.total}`).join("  ·  ") }) : null,
       el("div", { class: "cp-send", id: "cp-send", text: API.enabled ? "📤 결과를 선생님 카톡으로 전송 중…" : "ⓘ 로컬 모드 — 카톡 전송은 백엔드 연결 후" }),
-      this.idx < this.steps.length - 1 ? el("p", { class: "muted", text: "‘다음 구간 →’으로 계속 이어가요." }) : el("p", { class: "muted", text: "모든 구간을 끝냈어요! 수고했어요 👏" })
+      this.idx < this.steps.length - 1 ? el("p", { class: "muted", text: "‘다음 세트 →’으로 계속 이어가요." }) : el("p", { class: "muted", text: "모든 세트를 끝냈어요! 수고했어요 👏" })
     ]));
     if (res.total && !this.submitted[step.sec]) {
       this.submitted[step.sec] = true;
@@ -405,5 +405,22 @@ const Course = {
       }
     }
     return { correct, total, pct: total ? Math.round(correct / total * 100) : 0, wrong };
+  },
+
+  // 세트 내 유형별 점수 분해(결과 카드 표시용)
+  sectionBreakdown(secIdx) {
+    const sec = this.sections[secIdx];
+    const cat = { 단어: [0, 0], 빈칸: [0, 0], 독해: [0, 0], 유형: [0, 0] };
+    for (let i = sec.start; i < sec.end; i++) {
+      const st = this.steps[i];
+      let key = null;
+      if (st.type === "quiz") key = "단어";
+      else if (st.type === "rquiz") key = "독해";
+      else if (st.type === "qitem") key = (st.item.track === "drill") ? "유형" : "빈칸";
+      if (!key) continue;
+      cat[key][1]++;
+      if (this.ans[i] && this.ans[i].ok) cat[key][0]++;
+    }
+    return Object.entries(cat).filter(([, v]) => v[1] > 0).map(([k, v]) => ({ label: k, correct: v[0], total: v[1] }));
   }
 };
