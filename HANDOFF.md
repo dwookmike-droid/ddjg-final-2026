@@ -1,6 +1,6 @@
 # 핸드오프 — 기말 파이널 인터랙티브 웹앱
 
-작성 2026-06-22(갱신 2026-06-22 7차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브)** — 남은 건 선택 작업(Apps Script·카카오, §3 ②③).
+작성 2026-06-22(갱신 2026-06-22 8차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브, 현재 캐시 v8)** — 남은 건 선택 작업(Apps Script·카카오, §3 ②③).
 루트(절대경로): `/Users/dongwookkang/Library/Mobile Documents/com~apple~CloudDocs/2025년/2025 과외/1. 동대전고 과외/26년 고2/내신/1학기/기말고사/00_최종배포/finalcheck_webapp/`
 같이 볼 문서: 이 폴더의 [README.md](README.md)(구조)·[SETUP.md](SETUP.md)(배포). 메모리: `finalcheck-webapp`.
 
@@ -8,6 +8,11 @@
 학생용 인터랙티브 최종점검 웹앱(반응형 PWA). **콘텐츠·기능·변형 전사(19강까지) 완성. GitHub Pages 배포 완료(라이브) — 로컬 모드 동작.** 남은 선택 작업: Apps Script·카카오(카톡 자동전송·기기동기화), 엘리트 6~9회 전사. 시험일 **2026-07-03(금)**.
 
 **배포 URL**: https://dwookmike-droid.github.io/ddjg-final-2026/ · 저장소 `dwookmike-droid/ddjg-final-2026`(Public, Pages main `/(root)`).
+
+## 0-2. 8차 진행분 (2026-06-22)
+- **코스 사이드 드로어**: `☰`를 좌측 드로어로 교체(`showSheet(node,{side:true})` 추가). 상단 전체 진도율(완료 구간/전체) + 강(deck)별 목차(완료 ✓/현재 ▶/예정 ○, 현재 강 자동 펼침·그룹 토글) + 구간 점프(`Course.jumpTo`) + 기존 기능 메뉴 통합. 파일: `js/app.js`(showSheet), `js/course.js`(Menu 재작성·build에 `kind`/`short`·`_checkpoint`에서 `courseDone` 표시·jumpTo), `css/app.css`(.drawer·.toc-*).
+- **완료 판정 모델**: `Store.state.progress.courseDone{secIdx:1}` = 체크포인트 실제 도달 시 표시(점프로는 완료 오인 안 됨). 진도율 = 완료 구간/전체. "코스 처음부터"가 courseDone도 초기화.
+- **캐시 v7→v8**(index.html `?v` + sw.js VER). 빌드 점검·배포 완료(라이브 v8 확인).
 
 ## 0-1. 5차 진행분 (2026-06-22)
 - **배포 준비**: `.gitignore` 추가 + `finalcheck_webapp/` **git init·첫 커밋(main)** 완료. 잡파일 제외, audio 941 포함, 추적 966파일. 절대경로 0건·SW/manifest 상대경로라 GitHub Pages 서브경로에서 코드 수정 불필요(점검 완료).
