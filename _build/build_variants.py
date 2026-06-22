@@ -8,8 +8,11 @@
 회차 데이터는 SETS 에 누적한다(노션에서 전사). 각 문항 = (유형, stem, lead, [선지5], 정답0base, 해설).
 재실행 시 reading 의 L1~L4 세트와 bank 의 var-* 만 교체(L0·speed·cloze·qz·drl 보존).
 """
-import json, os
+import json, os, re, sys
 from collections import Counter
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from variant_passages import PASSAGES   # 강별 원문 지문(영어+한글)
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 READING = os.path.join(BASE, "data", "reading.json")
@@ -19,6 +22,32 @@ BANK = os.path.join(BASE, "data", "bank.json")
 GROUP = {"어휘": "어휘", "어법": "어법", "내용일치": "내용일치",
          "주제": "주제·요지", "지칭": "독해", "독해": "독해", "연결사": "연결사",
          "빈칸": "빈칸추론", "삽입": "순서·삽입", "순서": "순서·삽입"}
+
+# 지문이 꼭 필요한 group(원문 지문을 붙임). 어휘·어법·순서·삽입은 문장 동봉이라 자기완결.
+PASSAGE_DEPENDENT = {"내용일치", "주제·요지", "독해", "빈칸추론", "연결사"}
+# 자동매칭 실패분 수동 지정: "tag-문항번호" → [지문번호…](여러 개면 합쳐 부착, 크로스 지문)
+OVERRIDES = {
+  "13-4-20": [8],      # 매몰 비용 오류 제목
+  "13-5-14": [6, 8],   # 공정한 과정 + 매몰 비용 크로스 주제
+}
+_STOP = set("the a an and or but if of to in on for with as is are was were be been being that this these those it its we our us you your they their them his her not no so do does did have has had will would shall can could may might must from at by into than then there here what which who whom whose when where why how all any both each more most other some such only own same about over under out up down off".split())
+
+def _toks(s):
+    return {w for w in re.findall(r"[a-z]+", str(s).lower()) if len(w) >= 4 and w not in _STOP}
+
+def _resolve_passage(unit_key, lead, opts):
+    """문항(lead 우선, 없으면 선지)을 강 지문들과 영어 내용어로 매칭해 가장 겹치는 지문번호 반환.
+    신뢰도(겹치는 내용어 ≥3, 2위와 차이 ≥2)일 때만 채택, 아니면 None."""
+    P = PASSAGES.get(unit_key)
+    if not P:
+        return None
+    cand = lead if (lead and lead.strip()) else " ".join(opts)
+    ct = _toks(cand)
+    if not ct:
+        return None
+    scores = sorted(((len(ct & _toks(p["en"])), no) for no, p in P.items()), reverse=True)
+    top, second = scores[0], (scores[1] if len(scores) > 1 else (0, None))
+    return top[1] if (top[0] >= 3 and top[0] - second[0] >= 2) else None
 
 SETS = [
   {
@@ -1388,19 +1417,47 @@ def build():
     bank = json.load(open(BANK, encoding="utf-8"))
 
     new_sets, new_drill = [], []
+    resolve_log, need_cnt, ok_cnt = [], 0, 0
     for s in SETS:
         tag = "-".join(s["set_id"].split("-")[1:])   # L1-13-1 → 13-1
+        mid = s["set_id"].split("-")[1]              # 13 / 19 / E10
+        uk = "E" if mid.startswith("E") else mid     # 강 키
+        P = PASSAGES.get(uk, {})
+        plist = [{"no": no, "title": P[no]["title"], "en": P[no]["en"], "ko": P[no]["ko"]}
+                 for no in sorted(P)]
+        pidx = {no: i for i, no in enumerate(sorted(P))}
         qs = []
         for n, (t, stem, lead, opts, ans, exp) in enumerate(s["items"], 1):
             assert 0 <= ans < len(opts), f"{s['set_id']} #{n} 정답 범위 오류"
-            qs.append({"id": f"V{n}", "passage": 0, "type": t, "stem": stem,
+            grp = GROUP[t]
+            passage_text, qidx = None, 0
+            if P and grp in PASSAGE_DEPENDENT:
+                need_cnt += 1
+                pno = _resolve_passage(uk, lead, opts)
+                ov = OVERRIDES.get(f"{tag}-{n}")
+                if pno:
+                    passage_text, qidx, mark = P[pno]["en"], pidx.get(pno, 0), pno
+                elif ov:
+                    passage_text = "\n\n".join(P[no]["en"] for no in ov if no in P)
+                    qidx, mark = pidx.get(ov[0], 0), "ov" + "+".join(map(str, ov))
+                else:
+                    mark = None
+                if passage_text:
+                    ok_cnt += 1
+                resolve_log.append((s["set_id"], n, t, mark))
+            # reading 문항: 강 지문이 있으면 해당 지문 index, 없으면 0
+            qs.append({"id": f"V{n}", "passage": qidx, "type": t, "stem": stem,
                        "lead": lead, "options": opts, "answer": ans, "explain": exp})
-            new_drill.append({"id": f"var-{tag}-{n}", "track": "drill", "group": GROUP[t],
-                              "unit": s["unit"], "type": "mc", "source": s["source"],
-                              "passage": lead, "stem": stem, "options": opts,
-                              "answer": ans, "explain": exp})
+            # bank 문항: 지문필수 + 매칭 성공 → 원문 지문 부착(발췌는 lead로), 아니면 기존(발췌=passage)
+            d = {"id": f"var-{tag}-{n}", "track": "drill", "group": grp,
+                 "unit": s["unit"], "type": "mc", "source": s["source"],
+                 "passage": (passage_text if passage_text else lead), "stem": stem,
+                 "options": opts, "answer": ans, "explain": exp}
+            if passage_text and lead and lead.strip():
+                d["lead"] = lead
+            new_drill.append(d)
         new_sets.append({"id": s["set_id"], "level": s["level"], "source": s["source"],
-                         "title": s["title"], "passages": [], "questions": qs})
+                         "title": s["title"], "passages": plist, "questions": qs})
 
     # reading: L0 유지, L1~L4 변형 세트 교체
     reading["sets"] = [x for x in reading["sets"] if x["id"].split("-")[0] == "L0"] + new_sets
@@ -1414,6 +1471,10 @@ def build():
     print("레벨 분포:", dict(Counter(s["level"] for s in new_sets)))
     print("drill var 항목:", len(new_drill), "| 유형:", dict(Counter(d["group"] for d in new_drill)))
     print("reading sets 총:", len(reading["sets"]), "| bank items 총:", len(bank["items"]))
+    print(f"지문 자동배정: 지문필수 {need_cnt}건 중 {ok_cnt}건 매칭(미매칭 {need_cnt-ok_cnt}).")
+    if os.environ.get("SHOW_RESOLVE"):
+        for sid, n, t, pno in resolve_log:
+            print(f"  {sid} #{n:>2} {t:<5} → 지문{pno}")
 
 
 if __name__ == "__main__":

@@ -49,10 +49,13 @@ def expect_group(stem):
     return None
 
 
+PASSAGE_NEED = {"내용일치", "주제·요지", "독해", "빈칸추론", "연결사"}
+
+
 def main():
     bank = json.load(open(BANK, encoding="utf-8"))
     items = bank.get("items", [])
-    errs, warns = [], []
+    errs, warns, pgaps = [], [], []
 
     seen = set()
     for it in items:
@@ -100,12 +103,18 @@ def main():
             if eg and it.get("group") != eg:
                 warns.append(f"[E] 분류 의심 group='{it.get('group')}' 기대='{eg}' : {iid} / {(it.get('stem') or '')[:34]}")
 
+        # [F] 변형 지문필수 무지문 — 원문 지문 미복원분(스테이지 배포 중 경고)
+        if str(iid).startswith("var-") and it.get("group") in PASSAGE_NEED and not (it.get("passage") or "").strip():
+            pgaps.append(f"[F] 지문필수 무지문: {iid} ({it.get('group')}) / {(it.get('stem') or '')[:30]}")
+
     print(f"bank.json items: {len(items)}  | track: {dict(Counter(i.get('track') for i in items))}")
-    print(f"오류 {len(errs)} · 경고(분류의심) {len(warns)}")
+    print(f"오류 {len(errs)} · 경고(분류의심) {len(warns)} · 변형무지문 {len(pgaps)}")
     for e in errs:
         print("  ✗", e)
     for w in warns:
         print("  ⚠", w)
+    for p in pgaps:
+        print("  ·", p)
     if errs:
         print("\n실패: 오류를 수정하세요.")
         sys.exit(1)
