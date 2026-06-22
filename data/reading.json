@@ -1,0 +1,194 @@
+{
+  "levels": [
+    { "id": "L0", "name": "입문 · 한국어 선지", "grade": "기초 다지기", "badge": "☆", "desc": "모든 선지가 한국어. 지문 해석을 보며 뜻을 잡는 데 집중." },
+    { "id": "L1", "name": "기초", "grade": "4등급", "badge": "🌱", "desc": "변형 1·2회 수준. 영어 선지 입문." },
+    { "id": "L2", "name": "적용", "grade": "3등급", "badge": "🌿", "desc": "변형 3회 수준." },
+    { "id": "L3", "name": "심화", "grade": "2등급", "badge": "🌳", "desc": "변형 4회 수준." },
+    { "id": "L4", "name": "최상 · 엘리트", "grade": "1등급", "badge": "💎", "desc": "변형 5회 + 엘리트 6~10회. 고난도 선지." }
+  ],
+  "sets": [
+    {
+      "id": "L0-1",
+      "level": "L0",
+      "source": "올림포스 13강",
+      "title": "희소성 · 매몰비용 · 음악 접근성",
+      "passages": [
+        {
+          "no": 1,
+          "title": "희소성(scarcity)의 힘",
+          "topic": "구하기 어려울수록 사람들은 그것을 더 갖고 싶어한다 (13강 7번 · 희소성)",
+          "en": "When something becomes rare, people often want it more. A toy that is sold out feels more special than one stacked high on every shelf. Stores know this well. Sometimes they say \"only a few left\" so that buyers feel they must act quickly. The item itself has not changed at all. What changed is how hard it seems to get. This feeling — wanting something more just because it is scarce — guides many of our daily choices.",
+          "ko": "어떤 것이 희귀해지면 사람들은 종종 그것을 더 원한다. 품절된 장난감은 모든 선반에 높이 쌓여 있는 장난감보다 더 특별하게 느껴진다. 상점들은 이를 잘 알고 있다. 때로 그들은 “몇 개 안 남았어요”라고 말해 구매자가 서둘러 행동해야 한다고 느끼게 한다. 물건 자체는 전혀 변하지 않았다. 변한 것은 그것을 얻기가 얼마나 어려워 보이는가이다. 단지 희소하다는 이유로 무언가를 더 원하는 이 느낌이 우리의 많은 일상 선택을 이끈다.",
+          "vocab": [
+            { "en": "rare / scarce", "ko": "드문, 희귀한 / 희소한" },
+            { "en": "sold out", "ko": "품절된" },
+            { "en": "special", "ko": "특별한" },
+            { "en": "act quickly", "ko": "빨리 행동하다" },
+            { "en": "guide our choices", "ko": "우리의 선택을 이끌다" }
+          ]
+        },
+        {
+          "no": 2,
+          "title": "이미 쓴 돈(매몰비용)은 잊자",
+          "topic": "이미 써버린 돈은 되돌릴 수 없으니 선택의 기준으로 삼지 말라 (13강 8번 · 매몰비용)",
+          "en": "Imagine you paid for a movie ticket, but ten minutes in, the film is boring. Many people stay until the end, thinking, \"I already paid, so I should not waste it.\" But the money is already gone whether you stay or leave. Staying only wastes your time too. Smart choices look forward, not backward. The money you cannot get back should not control what you do next.",
+          "ko": "영화표를 샀는데 10분 만에 영화가 지루하다고 상상해 보라. 많은 사람이 “이미 돈을 냈으니 낭비하면 안 돼”라고 생각하며 끝까지 남는다. 그러나 그 돈은 남든 나가든 이미 사라졌다. 남아 있으면 시간까지 낭비할 뿐이다. 현명한 선택은 뒤가 아니라 앞을 본다. 되돌릴 수 없는 돈이 다음 행동을 지배하게 해서는 안 된다.",
+          "vocab": [
+            { "en": "pay for", "ko": "…의 값을 치르다" },
+            { "en": "boring", "ko": "지루한" },
+            { "en": "waste", "ko": "낭비하다" },
+            { "en": "look forward", "ko": "앞을 내다보다" },
+            { "en": "control", "ko": "지배하다, 좌우하다" }
+          ]
+        },
+        {
+          "no": 3,
+          "title": "음악을 더 쉽게 듣는 세상",
+          "topic": "기술이 발전하면서 누구나 음악을 쉽게 즐길 수 있게 되었다 (13강 3번 · 음악 접근성)",
+          "en": "In the past, hearing music often meant going to a concert or buying a record. Today, almost anyone with a phone can listen to millions of songs at any time. This change has made music a part of everyday life. People play it while studying, walking, or cooking. Because music is now so easy to reach, we use it more freely than ever before.",
+          "ko": "과거에는 음악을 듣는 것이 흔히 음악회에 가거나 음반을 사는 것을 의미했다. 오늘날엔 전화기를 가진 거의 누구나 언제든 수백만 곡의 노래를 들을 수 있다. 이 변화는 음악을 일상의 일부로 만들었다. 사람들은 공부하거나 걷거나 요리하는 동안에도 음악을 틀어 놓는다. 이제 음악이 너무 쉽게 닿을 수 있기 때문에, 우리는 그 어느 때보다 더 자유롭게 음악을 이용한다.",
+          "vocab": [
+            { "en": "in the past", "ko": "과거에는" },
+            { "en": "record", "ko": "음반, 레코드" },
+            { "en": "at any time", "ko": "언제든" },
+            { "en": "easy to reach", "ko": "쉽게 닿을 수 있는" },
+            { "en": "freely", "ko": "자유롭게" }
+          ]
+        }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["물건이 희귀해지면 사람들이 더 갖고 싶어한다", "가격이 싼 물건이 항상 품질이 좋다", "장난감은 많이 쌓아두어야 잘 팔린다", "상점은 정직하게 재고를 알려주어야 한다", "사람들은 광고를 믿지 않는다"], "answer": 0, "explain": "글 전체가 “희귀해지면 더 원한다”는 한 가지 생각을 말하고 있어요. 나머지 선지는 글에 없는 내용이에요." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "상점이 “몇 개 안 남았어요”라고 말하는 이유는 구매자가 ( A ) 하도록 만들기 위해서이다.", "options": ["천천히 고민하도록", "서둘러 사도록", "환불을 요구하도록", "다른 가게로 가도록", "가격을 흥정하도록"], "answer": 1, "explain": "“몇 개 안 남았어요”는 빨리 사야 한다는 조급함을 느끼게 해요. (지문의 act quickly = 서둘러 행동하다)" },
+        { "id": "Q3", "passage": 2, "type": "주장", "stem": "이 글이 주장하는 바로 가장 알맞은 것은?", "lead": "", "options": ["영화는 끝까지 봐야 한다", "이미 쓴 돈은 선택의 기준이 되면 안 된다", "돈을 아끼려면 표를 사지 말아야 한다", "지루한 영화는 만들면 안 된다", "시간보다 돈이 더 중요하다"], "answer": 1, "explain": "“현명한 선택은 앞을 본다”, 즉 이미 쓴 돈은 기준이 되면 안 된다는 게 핵심이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["남은 사람은 돈을 돌려받는다", "영화가 지루해도 끝까지 보는 게 이득이다", "남아 있으면 시간까지 낭비하게 된다", "현명한 선택은 과거를 되돌아본다", "돈은 나가면 다시 돌아온다"], "answer": 2, "explain": "지문에 “Staying only wastes your time too(남아 있으면 시간까지 낭비)”라고 그대로 나와요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["음악회가 음반보다 더 좋다", "기술 발전으로 음악을 쉽게 즐길 수 있게 됐다", "요리할 때는 음악을 끊어야 한다", "전화기는 음악 감상을 방해한다", "수백만 곡의 노래는 질이 낮다"], "answer": 1, "explain": "과거와 현재를 비교해 기술 덕분에 음악을 쉽게 즐기게 됐다는 게 중심 생각이에요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "과거와 달리 오늘날엔 음악이 ( A ) 때문에 사람들이 더 자주, 자유롭게 이용한다.", "options": ["더 비싸기", "구하기 어렵기", "쉽게 닿을 수 있기", "음악회에서만 들릴 수 있기", "질이 더 낮아졌기"], "answer": 2, "explain": "빈칸 앞뒤 맥락이 “music is now so easy to reach(이제 음악이 너무 쉽게 닿는다)”와 연결돼요." }
+      ]
+    },
+    {
+      "id": "L0-2", "level": "L0", "source": "올림포스 15강", "title": "상대성 · 정직한 발 · 향신료",
+      "passages": [
+        { "no": 1, "title": "빛이 휘다? (상대성의 발견)", "topic": "무거운 물체의 중력은 빛의 경로를 휘게 할 수 있다 (15강 · 상대성·중력 렌즈)",
+          "en": "More than a hundred years ago, a scientist named Einstein said something surprising. He claimed that light does not always travel in a straight line. When light passes near a very heavy object like a star, the object's gravity can bend its path. Later, scientists watched a solar eclipse and saw that starlight really did bend around the sun. This showed that Einstein was right.",
+          "ko": "100년도 더 전에 아인슈타인이라는 과학자가 놀라운 말을 했다. 그는 빛이 항상 직선으로 나아가지는 않는다고 주장했다. 빛이 별처럼 매우 무거운 물체 근처를 지나갈 때, 그 물체의 중력이 빛의 경로를 휘게 할 수 있다. 후에 과학자들은 개기일식(태양이 가려지는 현상)을 관찰해 별빛이 실제로 태양 주변에서 휘는 것을 보았다. 이는 아인슈타인이 옳았음을 보여주었다.",
+          "vocab": [ { "en": "straight line", "ko": "직선" }, { "en": "heavy object", "ko": "무거운 물체" }, { "en": "gravity", "ko": "중력" }, { "en": "bend", "ko": "휘게 하다, 구부리다" }, { "en": "solar eclipse", "ko": "일식(개기일식)" } ] },
+        { "no": 2, "title": "정직한 발", "topic": "사람은 표정은 꾸며도 발은 신경 쓰지 않아 진짜 감정을 드러낸다 (15강 · 정직한 발)",
+          "en": "People often control their faces to hide their feelings, but they forget about their feet. When someone is bored or wants to leave, their feet may point toward the door. When they are happy to see you, their feet often turn toward you. Because we rarely think about our feet, they can reveal what we truly feel.",
+          "ko": "사람들은 감정을 숨기려고 종종 얼굴을 통제하지만 발은 잊어버린다. 누군가가 지루하거나 떠나고 싶을 때, 그의 발은 문 쪽을 향할 수 있다. 당신을 봐서 기쁠 때는 발이 종종 당신 쪽으로 향한다. 우리는 발을 거의 의식하지 않기 때문에, 발은 우리가 진짜로 느끼는 것을 드러낼 수 있다.",
+          "vocab": [ { "en": "control", "ko": "통제하다" }, { "en": "hide", "ko": "숨기다" }, { "en": "point toward", "ko": "… 쪽을 향하다" }, { "en": "rarely", "ko": "거의 … 않다" }, { "en": "reveal", "ko": "드러내다" } ] },
+        { "no": 3, "title": "금처럼 귀했던 향신료", "topic": "향신료는 매우 귀해서 무역과 탐험을 이끌었다 (15강 · 향신료)",
+          "en": "Long ago, spices such as pepper and cinnamon were as valuable as gold. They could make plain food taste wonderful and could help keep food from going bad. Because spices grew only in faraway lands, merchants traveled across seas to bring them home. The search for spices even led explorers to discover new sea routes around the world.",
+          "ko": "오래전에 후추와 계피 같은 향신료는 금만큼 값어치가 있었다. 그것들은 평범한 음식을 훌륭하게 만들 수 있었고 음식이 상하는 것을 막는 데 도움이 되었다. 향신료는 먼 나라에서만 자랐기 때문에 상인들은 그것을 가져오려고 바다를 건너 여행했다. 향신료를 찾으려는 노력은 심지어 탐험가들이 전 세계의 새로운 바닷길을 발견하게 만들었다.",
+          "vocab": [ { "en": "spice", "ko": "향신료" }, { "en": "valuable", "ko": "값진, 귀중한" }, { "en": "go bad", "ko": "상하다" }, { "en": "merchant", "ko": "상인" }, { "en": "sea route", "ko": "바닷길, 항로" } ] }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["별빛은 항상 직진한다", "아인슈타인은 틀렸다", "무거운 물체의 중력은 빛을 휘게 할 수 있다", "빛은 무게가 많이 나간다", "일식은 자주 일어난다"], "answer": 2, "explain": "글의 핵심은 “중력이 빛을 휘게 한다”입니다." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "아인슈타인의 생각은 일식 관측을 통해 ( A ).", "options": ["사실로 확인되었다", "틀렸음이 드러났다", "의미가 없어졌다", "더 복잡해졌다", "잊혀졌다"], "answer": 0, "explain": "일식 때 별빛이 실제로 휘는 것을 보았으므로 아인슈타인의 생각이 사실로 확인됐어요." },
+        { "id": "Q3", "passage": 2, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["얼굴 표정은 거짓말을 못 한다", "발은 항상 문을 향한다", "사람들은 발을 잘 관리한다", "발은 사람의 진짜 감정을 드러낼 수 있다", "지루하면 말이 많아진다"], "answer": 3, "explain": "발은 의식하지 않기 때문에 진짜 감정을 드러낼 수 있다는 게 중심 생각이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["사람들은 발을 자주 의식한다", "떠나고 싶을 때 발이 문 쪽을 향할 수 있다", "얼굴은 감정을 숨기지 못한다", "발은 감정과 관계가 없다", "기쁠 때 발은 문을 향한다"], "answer": 1, "explain": "“their feet may point toward the door(발이 문 쪽을 향할 수 있다)”가 그대로 나와요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["향신료는 음식을 상하게 한다", "후추는 흔한 재료였다", "향신료는 어디서나 잘 자랐다", "향신료는 금보다 싸다", "향신료는 귀해서 무역과 탐험을 이끌었다"], "answer": 4, "explain": "향신료가 금만큼 귀해서 상인과 탐험가를 움직였다는 게 핵심이에요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "향신료를 구하려는 노력은 탐험가들이 ( A ) 만들었다.", "options": ["음식을 버리도록", "향신료를 포기하도록", "새로운 바닷길을 발견하도록", "금을 모으도록", "집에 머물도록"], "answer": 2, "explain": "마지막 문장 “discover new sea routes(새로운 바닷길을 발견)”와 연결돼요." }
+      ]
+    },
+    {
+      "id": "L0-3", "level": "L0", "source": "올림포스 17강", "title": "금본위 · 양방향 인터넷 · 자동화",
+      "passages": [
+        { "no": 1, "title": "돈을 금으로 보증하다 (금본위)", "topic": "금본위제는 돈을 금으로 바꿀 수 있게 해 신뢰를 줬지만 발행량을 제한했다 (17강 · 금본위)",
+          "en": "In the past, many countries used a system called the gold standard. Under this system, paper money could be exchanged for a fixed amount of gold. People trusted their money because they knew it was backed by real gold kept in banks. This made prices stable, but it also limited how much money a country could print, because there was only so much gold.",
+          "ko": "과거에 많은 나라가 금본위제라는 제도를 사용했다. 이 제도에서는 종이돈을 정해진 양의 금으로 바꿀 수 있었다. 사람들은 자신의 돈이 은행에 보관된 실제 금으로 보증된다는 것을 알았기에 돈을 신뢰했다. 이는 물가를 안정시켰지만, 금이 한정되어 있어서 한 나라가 찍을 수 있는 돈의 양도 제한했다.",
+          "vocab": [ { "en": "gold standard", "ko": "금본위제" }, { "en": "exchange for", "ko": "…로 교환하다, 바꾸다" }, { "en": "backed by", "ko": "…로 보증된" }, { "en": "stable", "ko": "안정된" }, { "en": "print money", "ko": "돈을 찍다(발행하다)" } ] },
+        { "no": 2, "title": "한 방향에서 양방향으로 (인터넷)", "topic": "인터넷은 일방향 미디어를 양방향으로 바꿔 사람들을 능동적 참여자로 만들었다 (17강 · 양방향 인터넷)",
+          "en": "Old media like television sent information in only one direction: from the broadcaster to the viewer. People could watch, but they could not reply. The internet changed this. Now users can both receive and send messages, share their own videos, and talk back to creators. This two-way flow has turned ordinary people into active participants instead of silent watchers.",
+          "ko": "텔레비전 같은 옛 미디어는 정보를 한 방향으로만 보냈다. 즉 방송사에서 시청자에게로만 전달됐다. 사람들은 볼 수는 있었지만 답할 수는 없었다. 인터넷은 이를 바꿨다. 이제 사용자는 메시지를 받고 보낼 수도 있고, 자신의 영상을 공유하며, 창작자에게 답할 수 있다. 이 양방향 흐름은 평범한 사람들을 조용한 구경꾼이 아니라 능동적 참여자로 바꿔 놓았다.",
+          "vocab": [ { "en": "one direction", "ko": "한 방향" }, { "en": "broadcaster", "ko": "방송사" }, { "en": "reply / talk back", "ko": "답하다 / 말대꾸하다" }, { "en": "two-way", "ko": "양방향의" }, { "en": "active participant", "ko": "능동적 참여자" } ] },
+        { "no": 3, "title": "기계가 일을 대신하면 (자동화)", "topic": "자동화는 일자리를 없애기보다 사람을 창의적 일로 옮긴다 (17강 · 자동화)",
+          "en": "Machines today can do many repetitive tasks faster than humans. Some people worry that machines will take all the jobs. However, when machines handle boring, repeated work, humans are freed to focus on creative and caring tasks that machines cannot do well. In this way, automation can change jobs rather than simply remove them.",
+          "ko": "오늘날 기계는 많은 반복적인 작업을 사람보다 빠르게 할 수 있다. 어떤 사람들은 기계가 모든 일자리를 빼앗을 것이라고 걱정한다. 그러나 기계가 지루하고 반복되는 일을 맡으면, 사람은 기계가 잘하지 못하는 창의적이고 돌보는 일에 집중할 수 있게 된다. 이런 식으로 자동화는 일자리를 단순히 없애기보다 변화시킬 수 있다.",
+          "vocab": [ { "en": "repetitive task", "ko": "반복적인 작업" }, { "en": "take jobs", "ko": "일자리를 빼앗다" }, { "en": "be freed to", "ko": "…할 여유가 생기다" }, { "en": "creative", "ko": "창의적인" }, { "en": "remove", "ko": "없애다, 제거하다" } ] }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["금은 어디에나 많았다", "종이돈은 가치가 없었다", "은행은 금을 숨겼다", "금본위제는 돈을 금으로 보증해 신뢰를 줬지만 발행을 제한했다", "사람들은 돈을 전혀 믿지 않았다"], "answer": 3, "explain": "신뢰(금 보증)와 한계(발행 제한)를 함께 말한 것이 핵심이에요." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "금본위제에서 사람들이 돈을 믿은 이유는 돈이 ( A ) 때문이다.", "options": ["언제나 인쇄될 수 있었기", "실제 금으로 보증되었기", "가격이 자주 바뀌었기", "금보다 비쌌기", "은행에 없었기"], "answer": 1, "explain": "“backed by real gold(실제 금으로 보증)”이 신뢰의 이유였어요." },
+        { "id": "Q3", "passage": 2, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["인터넷은 사람들을 수동적 시청자에서 능동적 참여자로 바꿨다", "텔레비전이 인터넷보다 낫다", "사람들은 영상 만들기를 싫어한다", "인터넷은 한 방향으로만 작동한다", "방송사는 시청자에게 답한다"], "answer": 0, "explain": "일방향→양방향으로 바뀌면서 사람들이 능동적 참여자가 됐다는 게 중심이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["텔레비전은 시청자의 답을 받았다", "인터넷은 정보를 한 방향으로 보낸다", "옛 미디어는 정보를 한 방향으로만 보냈다", "사용자는 메시지를 보낼 수 없다", "창작자는 답을 받지 못한다"], "answer": 2, "explain": "“Old media … only one direction(옛 미디어는 한 방향으로만)”이 그대로 나와요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["기계는 사람보다 느리다", "모든 일자리가 사라질 것이다", "기계는 창의적인 일을 더 잘한다", "사람은 반복 작업을 좋아한다", "자동화는 일자리를 없애기보다 사람을 창의적 일에 집중하게 한다"], "answer": 4, "explain": "기계가 반복 작업을 맡아 사람은 창의적 일로 옮겨간다는 게 주제예요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "기계가 지루한 반복 작업을 맡으면 사람은 ( A )에 집중할 수 있다.", "options": ["반복적인 일", "기계가 잘하는 일", "창의적이고 돌보는 일", "더 단순한 일", "위험한 일"], "answer": 2, "explain": "지문의 “creative and caring tasks(창의적이고 돌보는 일)”와 연결돼요." }
+      ]
+    },
+    {
+      "id": "L0-4", "level": "L0", "source": "올림포스 19강", "title": "체지방 · 에너지 저장 · 동면",
+      "passages": [
+        { "no": 1, "title": "몸은 에너지를 지방으로 저장한다", "topic": "체지방은 여분의 에너지를 나중을 위해 저장해 두는 유용한 방식이다 (19강 · 에너지 저장)",
+          "en": "Our bodies store extra energy in the form of fat. When we eat more than we need, the body keeps the leftover energy as fat for later use. This stored fat acts like a battery. During times when food is hard to find, the body can burn this fat to keep working. So body fat is not just a problem to remove; it is also a useful way to save energy.",
+          "ko": "우리 몸은 여분의 에너지를 지방의 형태로 저장한다. 필요한 것보다 많이 먹으면 몸은 남은 에너지를 나중에 쓰려고 지방으로 간직한다. 이 저장된 지방은 배터리처럼 작동한다. 음식을 찾기 어려운 시기에는 몸이 이 지방을 태워 계속 활동할 수 있다. 그래서 체지방은 단지 없애야 할 문제가 아니라 에너지를 저장하는 유용한 방식이기도 하다.",
+          "vocab": [ { "en": "store", "ko": "저장하다" }, { "en": "extra / leftover", "ko": "여분의 / 남은" }, { "en": "fat", "ko": "지방" }, { "en": "burn", "ko": "태우다" }, { "en": "save energy", "ko": "에너지를 아끼다(저장하다)" } ] },
+        { "no": 2, "title": "긴 겨울잠, 동면", "topic": "동면은 먹이가 부족한 겨울에 에너지를 아껴 살아남는 방법이다 (19강 · 동면)",
+          "en": "Some animals, like bears, sleep deeply through the cold winter. This long sleep is called hibernation. During hibernation, the animal's body slows down. Its heart beats fewer times and it uses very little energy. By doing this, the animal can survive the winter when food is scarce, living off the fat it stored during the warmer months.",
+          "ko": "곰 같은 어떤 동물들은 추운 겨울 내내 깊게 잔다. 이 긴 잠을 동면이라고 한다. 동면 동안 동물의 몸은 느려진다. 심장은 더 적게 뛰고 에너지를 아주 조금만 쓴다. 이렇게 함으로써 동물은 먹이가 부족한 겨울을, 따뜻한 달에 저장해 둔 지방으로 연명하며 살아남을 수 있다.",
+          "vocab": [ { "en": "hibernation", "ko": "동면" }, { "en": "slow down", "ko": "느려지다" }, { "en": "heart beat", "ko": "심장박동" }, { "en": "scarce", "ko": "부족한, 희소한" }, { "en": "survive", "ko": "살아남다" } ] },
+        { "no": 3, "title": "왜 음식 대신 지방으로 저장할까?", "topic": "몸속 지방은 도둑맞지 않고 함께 이동하는 안전한 에너지 저장법이다 (19강 · 이동형 저장)",
+          "en": "Why do animals store energy as fat inside their bodies instead of hiding food somewhere? One reason is that hidden food can be found and taken by others. Body fat, however, travels with the animal wherever it goes and cannot be stolen. This makes fat a safe and portable way to carry energy.",
+          "ko": "동물은 왜 음식을 어딘가에 숨기는 대신 몸속에 지방으로 에너지를 저장할까? 한 가지 이유는 숨겨진 음식은 다른 존재에게 발견되어 빼앗길 수 있기 때문이다. 그러나 체지방은 동물이 가는 곳 어디든 함께 이동하며 도둑맞을 수 없다. 이는 지방을 안전하고 휴대하기 좋게 에너지를 지니는 방법으로 만든다.",
+          "vocab": [ { "en": "hide", "ko": "숨기다" }, { "en": "be taken by", "ko": "…에게 빼앗기다" }, { "en": "travel with", "ko": "…와 함께 이동하다" }, { "en": "be stolen", "ko": "도둑맞다" }, { "en": "portable", "ko": "휴대하기 좋은" } ] }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["체지방은 항상 나쁜 것이다", "체지방은 여분의 에너지를 저장하는 유용한 방식이다", "우리는 음식을 적게 먹어야만 한다", "지방은 배터리를 망가뜨린다", "음식은 항상 구하기 쉽다"], "answer": 1, "explain": "체지방을 “나쁜 것”이 아니라 “에너지 저장법”으로 본 것이 핵심이에요." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "음식이 부족할 때 몸은 저장된 ( A )을 태우며 활동을 이어간다.", "options": ["물", "근육", "지방", "뼈", "피"], "answer": 2, "explain": "지문의 “burn this fat(이 지방을 태운다)”과 연결돼요." },
+        { "id": "Q3", "passage": 2, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["곰은 겨울에 활발해진다", "동면 중 심장은 더 빨리 뛴다", "동면은 여름에 일어난다", "동면은 먹이가 부족한 겨울을 에너지를 아껴 견디는 방법이다", "동물은 동면 중 많이 먹는다"], "answer": 3, "explain": "먹이가 부족한 겨울을 에너지를 아껴 견딘다는 게 중심 생각이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["동면 중 동물의 몸은 느려지고 에너지를 적게 쓴다", "동면은 따뜻한 계절에 한다", "곰은 동면하지 않는다", "동면 중 심장이 더 빨리 뛴다", "동물은 저장한 지방을 쓰지 않는다"], "answer": 0, "explain": "“body slows down … uses very little energy(몸이 느려지고 에너지를 적게 쓴다)”가 그대로 나와요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["숨긴 음식은 절대 발견되지 않는다", "지방은 무거워서 불편하다", "동물은 음식을 숨기는 게 더 낫다", "지방은 쉽게 도둑맞는다", "몸속 지방은 도둑맞지 않고 함께 다니는 안전한 저장법이다"], "answer": 4, "explain": "몸속 지방은 도둑맞지 않고 함께 이동하는 안전한 방법이라는 게 주제예요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "숨긴 음식과 달리 몸속 지방은 ( A ).", "options": ["쉽게 상한다", "도둑맞지 않고 늘 함께 다닌다", "다른 동물이 가져간다", "한 곳에만 머문다", "겨울에 사라진다"], "answer": 1, "explain": "“cannot be stolen … travels with the animal(도둑맞지 않고 함께 이동)”과 연결돼요." }
+      ]
+    },
+    {
+      "id": "L0-5", "level": "L0", "source": "교과서 4과", "title": "정조 · 수원화성 · 능행차",
+      "passages": [
+        { "no": 1, "title": "정조와 새 도시 화성", "topic": "정조는 나라를 강하게 만들 새 도시 화성을 세우고자 했다 (교과서 L4)",
+          "en": "King Jeongjo was a wise ruler of Korea. He wanted to build a strong new city called Hwaseong near Suwon. He hoped this city would honor his father and become a center of politics and trade. Building such a large fortress was a huge project, but Jeongjo believed it would make the country stronger.",
+          "ko": "정조는 현명한 조선의 왕이었다. 그는 수원 근처에 화성이라는 강한 새 도시를 세우고 싶어 했다. 그는 이 도시가 아버지를 기리고 정치와 무역의 중심지가 되기를 바랐다. 그러한 큰 요새를 짓는 것은 거대한 사업이었지만, 정조는 그것이 나라를 더 강하게 만들 것이라 믿었다.",
+          "vocab": [ { "en": "wise ruler", "ko": "현명한 통치자" }, { "en": "fortress", "ko": "요새, 성" }, { "en": "honor", "ko": "기리다, 존경하다" }, { "en": "politics", "ko": "정치" }, { "en": "trade", "ko": "무역" } ] },
+        { "no": 2, "title": "돌을 들어 올린 기구, 거중기", "topic": "정약용의 거중기 덕분에 무거운 돌을 쉽게 들어 공사가 빨라졌다 (교과서 L4)",
+          "en": "To build Hwaseong, workers needed to lift very heavy stones. A scholar named Jeong Yak-yong designed a special machine called the geojunggi, a kind of crane that used pulleys. With this machine, a few people could raise huge stones easily. Thanks to such clever tools, the fortress was finished faster and with less labor than expected.",
+          "ko": "화성을 지으려면 일꾼들은 매우 무거운 돌을 들어 올려야 했다. 정약용이라는 학자가 도르래를 이용한 일종의 크레인인 거중기라는 특별한 기계를 설계했다. 이 기계로 몇 사람이 거대한 돌을 쉽게 들어 올릴 수 있었다. 이러한 영리한 도구 덕분에 요새는 예상보다 빠르고 적은 노동력으로 완성되었다.",
+          "vocab": [ { "en": "lift / raise", "ko": "들어 올리다" }, { "en": "scholar", "ko": "학자" }, { "en": "pulley", "ko": "도르래" }, { "en": "labor", "ko": "노동(력)" }, { "en": "clever tool", "ko": "영리한 도구" } ] },
+        { "no": 3, "title": "임금의 행차, 능행차", "topic": "능행차는 아버지에 대한 효심과 왕의 권위를 함께 보여주었다 (교과서 L4)",
+          "en": "Jeongjo often traveled from the palace to Hwaseong in a grand procession. Thousands of soldiers, officials, and horses joined the journey to visit his father's tomb. This royal parade was not only a way to show respect to his father but also a chance to display the king's power and connect with the people along the road.",
+          "ko": "정조는 궁에서 화성까지 종종 성대한 행차로 이동했다. 수천 명의 병사와 관리, 말들이 아버지의 묘를 찾는 여정에 함께했다. 이 왕의 행차는 아버지에게 존경을 표하는 방법이었을 뿐만 아니라 왕의 힘을 드러내고 길가의 백성들과 소통하는 기회이기도 했다.",
+          "vocab": [ { "en": "procession / parade", "ko": "행차, 행렬" }, { "en": "official", "ko": "관리, 관원" }, { "en": "tomb", "ko": "묘, 무덤" }, { "en": "display power", "ko": "힘을 드러내다" }, { "en": "connect with", "ko": "…와 소통하다" } ] }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["정조는 도시를 싫어했다", "화성은 자연적으로 생겨났다", "정조는 나라를 강하게 만들 새 도시 화성을 세우고자 했다", "화성은 무역과 관계가 없다", "정조는 아버지를 미워했다"], "answer": 2, "explain": "정조가 나라를 강하게 할 새 도시 화성을 세우려 했다는 게 핵심이에요." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "정조는 화성이 ( A )가 되기를 바랐다.", "options": ["전쟁터", "정치와 무역의 중심지", "비밀 장소", "버려진 마을", "작은 농장"], "answer": 1, "explain": "“center of politics and trade(정치와 무역의 중심지)”가 그대로 나와요." },
+        { "id": "Q3", "passage": 2, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["화성은 손으로만 지어졌다", "거중기는 돌을 부쉈다", "공사는 예상보다 오래 걸렸다", "거중기 같은 기구 덕분에 무거운 돌을 쉽게 들어 공사가 빨라졌다", "정약용은 성을 설계하지 않았다"], "answer": 3, "explain": "거중기 덕분에 적은 인력으로 빨리 완성됐다는 게 중심이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["정약용이 거중기를 설계했다", "거중기는 사람을 더 많이 필요로 했다", "화성은 도르래 없이 지어졌다", "공사는 예상보다 느렸다", "돌은 가벼웠다"], "answer": 0, "explain": "“Jeong Yak-yong designed … geojunggi(정약용이 거중기를 설계)”가 그대로 나와요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["능행차는 비밀리에 이뤄졌다", "소수의 사람만 참여했다", "능행차는 무역을 위한 것이었다", "정조는 백성을 피했다", "정조의 능행차는 아버지에 대한 효심과 왕의 권위를 함께 보여줬다"], "answer": 4, "explain": "효심과 왕의 권위를 함께 보였다는 게 주제예요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "능행차는 효심을 보이는 동시에 왕의 ( A )를 드러내는 기회였다.", "options": ["약함", "가난", "권위(힘)", "두려움", "무관심"], "answer": 2, "explain": "“display the king's power(왕의 힘을 드러내다)”와 연결돼요." }
+      ]
+    },
+    {
+      "id": "L0-6", "level": "L0", "source": "교과서 5과", "title": "우주비행사 유진의 우주 일지",
+      "passages": [
+        { "no": 1, "title": "무중력 속의 하루", "topic": "무중력 때문에 우주에서의 일상은 지구와 매우 다르다 (교과서 L5)",
+          "en": "Astronaut Yujin wrote in her space log about daily life on the space station. In space, there is almost no gravity, so everything floats. She had to strap herself to the wall to sleep, and her food and tools would fly away if she let them go. Even simple tasks like drinking water became strange and difficult without gravity.",
+          "ko": "우주비행사 유진은 우주 정거장에서의 일상을 우주 일지에 적었다. 우주에는 중력이 거의 없어서 모든 것이 떠다닌다. 그녀는 자기 위해 벽에 몸을 끈으로 묶어야 했고, 음식과 도구도 놓으면 날아가 버렸다. 물 마시기 같은 단순한 일조차 중력이 없으면 이상하고 어려워졌다.",
+          "vocab": [ { "en": "astronaut", "ko": "우주비행사" }, { "en": "gravity", "ko": "중력" }, { "en": "float", "ko": "떠다니다" }, { "en": "strap", "ko": "끈으로 묶다" }, { "en": "tool", "ko": "도구" } ] },
+        { "no": 2, "title": "우주에서 본 지구", "topic": "우주에서 본 지구는 국경 없는 하나의 집처럼 보였다 (교과서 L5)",
+          "en": "One of Yujin's favorite moments was looking down at Earth from the window. From space, the planet looked like a beautiful blue marble with no borders between countries. Seeing Earth this way made her feel that all people share one small home and should take care of it together.",
+          "ko": "유진이 가장 좋아한 순간 중 하나는 창문에서 지구를 내려다보는 것이었다. 우주에서 본 지구는 나라 사이의 국경이 없는 아름다운 푸른 구슬 같았다. 이렇게 지구를 보면서 그녀는 모든 사람이 하나의 작은 집을 함께 나누며 함께 돌봐야 한다고 느꼈다.",
+          "vocab": [ { "en": "look down at", "ko": "…를 내려다보다" }, { "en": "border", "ko": "국경, 경계" }, { "en": "blue marble", "ko": "푸른 구슬" }, { "en": "share", "ko": "나누다, 공유하다" }, { "en": "take care of", "ko": "…를 돌보다" } ] },
+        { "no": 3, "title": "함께라서 가능했던 임무", "topic": "우주에서는 서로 믿고 돕는 협력이 생존의 열쇠였다 (교과서 L5)",
+          "en": "Life on the space station was not always easy. Yujin and her crew had to fix machines, run experiments, and solve problems far from home. When something went wrong, they could not simply call for help nearby. By trusting and helping one another, the small team learned that teamwork was the key to surviving in space.",
+          "ko": "우주 정거장에서의 생활이 늘 쉽지는 않았다. 유진과 동료들은 집에서 멀리 떨어진 곳에서 기계를 고치고, 실험을 하고, 문제를 해결해야 했다. 무언가 잘못되어도 가까이서 쉽게 도움을 부를 수 없었다. 서로 믿고 도움으로써, 그 작은 팀은 협력이 우주에서 살아남는 열쇠임을 배웠다.",
+          "vocab": [ { "en": "crew", "ko": "동료, 승무원" }, { "en": "run experiments", "ko": "실험을 하다" }, { "en": "go wrong", "ko": "잘못되다" }, { "en": "trust", "ko": "믿다, 신뢰하다" }, { "en": "teamwork", "ko": "협력, 팀워크" } ] }
+      ],
+      "questions": [
+        { "id": "Q1", "passage": 1, "type": "주제", "stem": "이 글의 주제로 가장 알맞은 것은?", "lead": "", "options": ["우주에서는 모든 것이 바닥에 붙는다", "무중력 때문에 우주에서의 일상은 지구와 매우 다르다", "유진은 우주에서 잠을 자지 않았다", "우주에서 물 마시기는 쉬워진다", "우주에는 중력이 매우 강하다"], "answer": 1, "explain": "무중력 때문에 우주 일상이 지구와 많이 다르다는 게 핵심이에요." },
+        { "id": "Q2", "passage": 1, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "우주에는 중력이 거의 없어서 모든 것이 ( A ).", "options": ["바닥에 붙는다", "사라진다", "떠다닌다", "무거워진다", "얼어붙는다"], "answer": 2, "explain": "“everything floats(모든 것이 떠다닌다)”가 그대로 나와요." },
+        { "id": "Q3", "passage": 2, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["지구는 우주에서 빨간색으로 보였다", "유진은 창밖을 보지 않았다", "지구에는 뚜렷한 국경선이 보였다", "우주에서 본 지구는 국경 없는 하나의 집 같아 함께 돌봐야 한다는 마음을 줬다", "유진은 지구를 싫어하게 됐다"], "answer": 3, "explain": "국경 없는 하나의 집처럼 보여 함께 돌봐야 한다는 게 중심이에요." },
+        { "id": "Q4", "passage": 2, "type": "일치", "stem": "글의 내용과 일치하는 것은?", "lead": "", "options": ["우주에서 지구는 국경이 보이지 않는 푸른 구슬 같았다", "지구는 회색으로 보였다", "나라 사이의 국경이 뚜렷했다", "유진은 지구를 본 적이 없다", "지구는 네모났다"], "answer": 0, "explain": "“a blue marble with no borders(국경 없는 푸른 구슬)”와 연결돼요." },
+        { "id": "Q5", "passage": 3, "type": "요지", "stem": "이 글의 요지로 가장 알맞은 것은?", "lead": "", "options": ["우주 생활은 항상 쉬웠다", "유진은 혼자 모든 일을 했다", "문제가 생기면 쉽게 도움을 받았다", "실험은 필요 없었다", "우주에서는 서로 믿고 돕는 협력이 생존의 열쇠였다"], "answer": 4, "explain": "서로 믿고 돕는 협력이 생존의 열쇠라는 게 주제예요." },
+        { "id": "Q6", "passage": 3, "type": "빈칸", "stem": "빈칸에 들어갈 말로 가장 알맞은 것은?", "lead": "집에서 멀리 떨어진 우주에서 살아남는 열쇠는 ( A )였다.", "options": ["행운", "협력(팀워크)", "돈", "속도", "침묵"], "answer": 1, "explain": "“teamwork was the key(협력이 열쇠)”와 연결돼요." }
+      ]
+    }
+  ]
+}

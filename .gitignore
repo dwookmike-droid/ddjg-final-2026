@@ -1,0 +1,23 @@
+# macOS / iCloud Drive 잔여물
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+.LSOverride
+Icon?
+
+# Claude / 에디터
+.claude/
+.vscode/
+.idea/
+
+# 파이썬 빌드 캐시 (소스는 _build/ 유지, 캐시만 제외)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 로컬 서버 로그 등
+*.log
