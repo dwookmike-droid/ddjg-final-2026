@@ -21,14 +21,15 @@ CIRC = "①②③④⑤⑥⑦⑧⑨⑩"
 
 
 def ans_in_explain(ex):
-    """explain 문자열에서 정답 번호를 0-based 로 추출. 없으면 None."""
+    """explain 의 '정답 X' 표기에서만 정답 번호를 0-based 로 추출. 없으면 None.
+    (해설 본문에 함정 선지를 ①②로 언급하는 변형 회차를 정답으로 오인하지 않도록 '정답' 키워드 한정)"""
     if not ex:
         return None
-    for i, c in enumerate(CIRC):
-        if c in ex:
-            return i
-    m = re.search(r"정답\s*([1-9])", ex)
-    return int(m.group(1)) - 1 if m else None
+    m = re.search(r"정답\s*([①②③④⑤⑥⑦⑧⑨⑩1-9])", ex)
+    if not m:
+        return None
+    ch = m.group(1)
+    return CIRC.index(ch) if ch in CIRC else int(ch) - 1
 
 
 def expect_group(stem):

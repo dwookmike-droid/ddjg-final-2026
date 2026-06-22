@@ -54,7 +54,7 @@ const Reading = {
       }, [
         el("div", { class: "set-main" }, [
           el("div", { class: "set-title", text: s.title }),
-          el("div", { class: "set-sub", text: `${s.source} · 지문 ${s.passages.length} · 문항 ${s.questions.length}` })
+          el("div", { class: "set-sub", text: s.passages.length ? `${s.source} · 지문 ${s.passages.length} · 문항 ${s.questions.length}` : `${s.source} · ${s.questions.length}문항` })
         ]),
         done ? el("span", { class: "set-badge ok", text: `${done.pct}점` }) : el("span", { class: "set-go", text: "▶" })
       ]));
@@ -74,6 +74,11 @@ const Reading = {
 
     const t0 = Date.now();
     const answers = {};   // qid -> index
+
+    // 지문 없는 변형 회차: 각 문항에 인용이 포함된다는 안내
+    if (!s.passages.length) {
+      root.appendChild(el("div", { class: "variant-note muted", text: "📝 영어 선지 종합 변형 회차예요. 지문은 각 문항에 인용으로 주어집니다." }));
+    }
 
     // 지문들
     s.passages.forEach(p => {
