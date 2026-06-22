@@ -41,15 +41,61 @@ const App = {
   setProgress(p) { this.prog.style.width = Math.max(0, Math.min(100, p)) + "%"; }
 };
 
-/* ---------- 메뉴 ---------- */
+/* ---------- 사이드 드로어 (진도율 · 범위 목차 · 이동 · 메뉴) ---------- */
 const Menu = {
   open() {
+    const pg = Store.state.progress;
+    const done = pg.courseDone || {};
+    const total = Math.max(1, Course.sections.length);
+    const doneN = Course.sections.filter((_, i) => done[i]).length;
+    const pct = Math.round(doneN / total * 100);
+    const deckLabel = id => ((Data.vocab.decks.find(d => d.id === id) || {}).label) || id;
+    const statusOf = (sec, i) => (Course.idx >= sec.start && Course.idx < sec.end) ? "current"
+      : (done[i] ? "done" : "todo");
+    const DOT = { current: "▶", done: "✓", todo: "○" };
+
     const item = (icon, label, fn) => el("button", { class: "menu-item", onclick: () => { close(); fn(); } },
       [el("span", { class: "mi-ic", text: icon }), el("span", { text: label })]);
-    const node = el("div", { class: "sheet menu-sheet" }, [
-      el("div", { class: "sheet-grip" }),
+
+    // 목차(범위) — 강(deck)별 그룹, 현재 강만 펼침
+    const groups = [];
+    Course.sections.forEach((sec, i) => {
+      let g = groups[groups.length - 1];
+      if (!g || g.deck !== sec.deck) { g = { deck: sec.deck, items: [] }; groups.push(g); }
+      g.items.push({ sec, i });
+    });
+    const toc = el("div", { class: "toc" });
+    groups.forEach(g => {
+      const gDone = g.items.filter(x => statusOf(x.sec, x.i) === "done").length;
+      const hasCur = g.items.some(x => statusOf(x.sec, x.i) === "current");
+      const body = el("div", { class: "toc-group-body" + (hasCur ? "" : " hidden") },
+        g.items.map(({ sec, i }) => {
+          const stt = statusOf(sec, i);
+          return el("button", { class: "toc-sec" + (stt === "current" ? " current" : ""), onclick: () => { close(); Course.jumpTo(i); } }, [
+            el("span", { class: "toc-dot " + stt, text: DOT[stt] }),
+            el("span", { class: "toc-sec-label", text: sec.short || sec.label })
+          ]);
+        }));
+      const chev = el("span", { class: "toc-chev", text: hasCur ? "▾" : "▸" });
+      const head = el("button", { class: "toc-group-head", onclick: () => { chev.textContent = body.classList.toggle("hidden") ? "▸" : "▾"; } }, [
+        el("span", { class: "toc-group-name", text: deckLabel(g.deck) }),
+        el("span", { class: "toc-group-cnt", text: `${gDone}/${g.items.length}` }),
+        chev
+      ]);
+      toc.appendChild(el("div", { class: "toc-group" }, [head, body]));
+    });
+
+    const node = el("div", { class: "drawer course-drawer" }, [
       el("div", { class: "menu-title", text: `${Store.state.student.name} · ${Store.state.student.class}` }),
-      item("▶", "이어서 학습", () => {}),
+      el("div", { class: "toc-overall" }, [
+        el("div", { class: "toc-overall-top" }, [el("span", { text: "전체 진도" }), el("b", { text: pct + "%" })]),
+        el("div", { class: "toc-bar" }, [el("div", { class: "toc-bar-fill" })]),
+        el("div", { class: "toc-steps", text: `${doneN} / ${total}구간 완료` })
+      ]),
+      el("div", { class: "toc-cap", text: "범위 · 눌러서 이동" }),
+      toc,
+      el("div", { class: "drawer-divider" }),
+      item("▶", "이어서 학습", () => Course.render()),
       item("📊", "학습 현황", () => openSub("학습 현황", r => Home.render(r))),
       item("📖", "단어장 사전", () => openSub("단어장 사전", r => VocabDict.render(r))),
       item("📝", "단어 시험 따로 풀기", () => openSub("단어 시험", r => VocabTest.setup(r))),
@@ -60,9 +106,13 @@ const Menu = {
       item("📚", "독해 모음", () => openSub("독해 시험", r => Reading.render(r))),
       item("📕", "오답노트", () => openSub("오답노트", r => WrongNote.render(r))),
       item("⚙️", "설정", () => openSub("설정", r => Settings.render(r))),
-      item("🔄", "코스 처음부터", () => { if (confirm("코스를 처음부터 다시 시작할까요? (오답·점수 기록은 유지)")) { Store.state.progress.courseIdx = 0; Store.save(); Course.idx = 0; Course.render(); } })
+      item("🔄", "코스 처음부터", () => { if (confirm("코스를 처음부터 다시 시작할까요? (오답·점수 기록은 유지)")) { Store.state.progress.courseIdx = 0; Store.state.progress.courseDone = {}; Store.save(); Course.idx = 0; Course.render(); } })
     ]);
-    var close = showSheet(node);
+    var close = showSheet(node, { side: true });
+    requestAnimationFrame(() => {
+      const f = node.querySelector(".toc-bar-fill"); if (f) f.style.width = pct + "%";
+      const cur = node.querySelector(".toc-sec.current"); if (cur) cur.scrollIntoView({ block: "center" });
+    });
   }
 };
 function openSub(title, renderFn) { App.enterSub(title); App.main.innerHTML = ""; renderFn(App.main); }
@@ -100,19 +150,19 @@ const Course = {
             this.push({ type: "quiz", sec: secIdx, q: this.mcq(w, pool) }));
         });
         this.push({ type: "checkpoint", sec: secIdx });
-        this.sections.push({ label, deck: deck.id, start, end: this.steps.length });
+        this.sections.push({ label, deck: deck.id, kind: "vocab", short: partN > 1 ? `단어 ${part}/${partN}` : "단어", start, end: this.steps.length });
       }
       // 본문 빈칸 구간 (해당 강 cloze 문항이 있을 때)
       this._bankSection(deck, "cloze", `${deck.label} 본문 빈칸`, "cloze");
       // 독해 세트는 각각 별도 구간
-      Data.reading.sets.filter(rs => rs.source === deck.label).forEach(rs => {
+      Data.reading.sets.filter(rs => rs.source === deck.label).forEach((rs, ri) => {
         const secIdx = this.sections.length, start = this.steps.length;
         const label = `${deck.label} 독해`;
         this.push({ type: "intro", sec: secIdx, label, reading: true });
         rs.passages.forEach(p => this.push({ type: "rpassage", sec: secIdx, set: rs, p }));
         rs.questions.forEach(q => this.push({ type: "rquiz", sec: secIdx, set: rs, q }));
         this.push({ type: "checkpoint", sec: secIdx });
-        this.sections.push({ label, deck: deck.id, start, end: this.steps.length });
+        this.sections.push({ label, deck: deck.id, kind: "reading", short: `독해 ${ri + 1} · ${rs.level}`, start, end: this.steps.length });
       });
       // 유형별 드릴 구간 (해당 강 태그 문항이 있을 때)
       this._bankSection(deck, "drill", `${deck.label} 유형 훈련`, "drill");
@@ -128,7 +178,7 @@ const Course = {
     this.push({ type: "intro", sec: secIdx, label, kind });
     items.forEach(it => this.push({ type: "qitem", sec: secIdx, item: it }));
     this.push({ type: "checkpoint", sec: secIdx });
-    this.sections.push({ label, deck: deck.id, start, end: this.steps.length });
+    this.sections.push({ label, deck: deck.id, kind, short: kind === "cloze" ? "본문 빈칸" : "유형 훈련", start, end: this.steps.length });
   },
   push(step) { step._i = this.steps.length; this.steps.push(step); },
 
@@ -145,6 +195,10 @@ const Course = {
     this.idx++; this._save(); this.render();
   },
   prev() { if (this.idx > 0) { this.idx--; this._save(); this.render(); } },
+  jumpTo(secIdx) {
+    const sec = this.sections[secIdx]; if (!sec) return;
+    this.idx = sec.start; this._save(); this.render();
+  },
   _save() { Store.state.progress.courseIdx = this.idx; Store.save(); },
 
   render() {
@@ -307,6 +361,9 @@ const Course = {
 
   _checkpoint(step, host) {
     const sec = this.sections[step.sec];
+    const pg = Store.state.progress;
+    if (!pg.courseDone) pg.courseDone = {};
+    if (!pg.courseDone[step.sec]) { pg.courseDone[step.sec] = 1; Store.save(); }   // 구간 완료(체크포인트 도달)
     const res = this.sectionResult(step.sec);
     const pass = res.pct >= CONFIG.PASS_PCT;
     host.appendChild(el("div", { class: "step-card checkpoint" }, [

@@ -2,9 +2,9 @@
  *  app.js — 라우터 · 로그인 · 홈 · 러너 · 결과 · 오답노트 · 부팅
  * =========================================================== */
 
-/* ---------- 바텀시트 ---------- */
-function showSheet(node) {
-  const back = el("div", { class: "sheet-back", onclick: (e) => { if (e.target === back) close(); } }, [node]);
+/* ---------- 바텀시트 / 사이드 드로어 ---------- */
+function showSheet(node, opts = {}) {
+  const back = el("div", { class: "sheet-back" + (opts.side ? " side" : ""), onclick: (e) => { if (e.target === back) close(); } }, [node]);
   function close() { back.classList.add("closing"); setTimeout(() => back.remove(), 220); }
   node.appendChild(el("button", { class: "sheet-close", html: "✕", onclick: close }));
   document.body.appendChild(back);
