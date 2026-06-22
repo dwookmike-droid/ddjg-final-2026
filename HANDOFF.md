@@ -1,6 +1,6 @@
 # 핸드오프 — 기말 파이널 인터랙티브 웹앱
 
-작성 2026-06-22(갱신 2026-06-22 10차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브, 현재 캐시 v11) + 백엔드(Apps Script) 연결 완료** — 서버 동기화·결과 시트 기록 ON. **카카오 자동전송은 미사용(결정 변경)** — 선생님이 시트로 결과 확인.
+작성 2026-06-22(갱신 2026-06-23 11차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브, 현재 캐시 v13) + 백엔드(Apps Script) 연결 완료** — 서버 동기화·결과 시트 기록 ON. **카카오 자동전송은 미사용** — 선생님이 시트로 결과 확인.
 루트(절대경로): `/Users/dongwookkang/Library/Mobile Documents/com~apple~CloudDocs/2025년/2025 과외/1. 동대전고 과외/26년 고2/내신/1학기/기말고사/00_최종배포/finalcheck_webapp/`
 같이 볼 문서: 이 폴더의 [README.md](README.md)(구조)·[SETUP.md](SETUP.md)(배포). 메모리: `finalcheck-webapp`.
 
@@ -9,6 +9,12 @@
 
 **배포 URL**: https://dwookmike-droid.github.io/ddjg-final-2026/ · 저장소 `dwookmike-droid/ddjg-final-2026`(Public, Pages main `/(root)`).
 **백엔드**: Apps Script 웹앱 `/exec`가 `js/config.js`의 `APPS_SCRIPT_URL`에 연결됨(라이브). 결과·진도는 그 프로젝트의 구글 스프레드시트(students·progress·results)에 쌓임. 테스트로 만든 `연결테스트`·`문구테스트` 학생 행은 시트에서 지우면 됨.
+
+## 0-5. 11차 진행분 (2026-06-23)
+- **변형 문항 원문 지문 복원**: 변형(`var-*`)이 '지문 없는 종합문항' 설계라 앱에서 내용일치·주제·제목 등이 지문 없이 노출되던 문제 해결. 노션 "올림포스 N강 시험범위 원문"에서 지문(영어+한글)을 `_build/variant_passages.py`로 옮기고(13·15·17·19강+장문), `build_variants.py`가 부착.
+- **방식**: reading 변형 14세트 전부에 강 지문 attach(L0와 동일 구조) + bank 지문필수 문항에 원문 지문 자동배정(`_resolve_passage`: lead/선지 영어 토큰 매칭, 1·2회 정답표로 21/21 검증·보수적 임계값). 엘리트는 전 강 통합 풀(`_resolve_combined`)로 강 표시 부착. 자동 실패분은 `OVERRIDES`로 수동 지정.
+- **결과**: 변형 reading 지문0 세트 14→0, bank 변형 지문필수 무지문 43→**1**(var-E10-20=전범위 캡스톤, 단일지문 없음·허용). 순서·삽입·어휘·어법은 자기완결이라 유지. `qc_check.py`에 변형 무지문 점검(경고) 추가. 캐시 v11→v13(2단계 배포).
+- 재빌드: `python3 _build/build_variants.py`(SHOW_RESOLVE=1로 배정 로그) → `python3 _build/qc_check.py`. 지문 추가는 variant_passages.py·OVERRIDES만 수정.
 
 ## 0-4. 10차 진행분 (2026-06-22)
 - **백엔드 연결(②)**: 사용자가 Apps Script 배포한 `/exec` URL을 `config.js APPS_SCRIPT_URL`에 연결. 브라우저 fetch로 로그인·결과제출 라운드트립 검증(ok). **서버 동기화·결과 시트 기록 ON**. 캐시 v9→v10.
