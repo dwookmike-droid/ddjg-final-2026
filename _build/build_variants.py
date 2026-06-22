@@ -29,6 +29,8 @@ PASSAGE_DEPENDENT = {"내용일치", "주제·요지", "독해", "빈칸추론",
 OVERRIDES = {
   "13-4-20": [8],      # 매몰 비용 오류 제목
   "13-5-14": [6, 8],   # 공정한 과정 + 매몰 비용 크로스 주제
+  "15-5-12": [1],      # [A] 상대성·일식 ↔ 교과서 크로스
+  "15-5-13": [6],      # [E] 향신료 ↔ 교과서 크로스
 }
 _STOP = set("the a an and or but if of to in on for with as is are was were be been being that this these those it its we our us you your they their them his her not no so do does did have has had will would shall can could may might must from at by into than then there here what which who whom whose when where why how all any both each more most other some such only own same about over under out up down off".split())
 
@@ -41,6 +43,8 @@ def _resolve_passage(unit_key, lead, opts):
     P = PASSAGES.get(unit_key)
     if not P:
         return None
+    if len(P) == 1:                 # 단일 지문 강(예: 19강 장문) → 무조건 그 지문
+        return next(iter(P))
     cand = lead if (lead and lead.strip()) else " ".join(opts)
     ct = _toks(cand)
     if not ct:
@@ -48,6 +52,21 @@ def _resolve_passage(unit_key, lead, opts):
     scores = sorted(((len(ct & _toks(p["en"])), no) for no, p in P.items()), reverse=True)
     top, second = scores[0], (scores[1] if len(scores) > 1 else (0, None))
     return top[1] if (top[0] >= 3 and top[0] - second[0] >= 2) else None
+
+
+def _resolve_combined(lead, opts):
+    """엘리트(전 강 통합): 모든 강 지문 풀에서 가장 겹치는 (강,지문번호) 반환."""
+    cand = lead if (lead and lead.strip()) else " ".join(opts)
+    ct = _toks(cand)
+    if not ct:
+        return None
+    scores = sorted(((len(ct & _toks(p["en"])), g, no)
+                     for g, ps in PASSAGES.items() for no, p in ps.items()), reverse=True)
+    if not scores:
+        return None
+    top = scores[0]
+    second = scores[1][0] if len(scores) > 1 else 0
+    return (top[1], top[2]) if (top[0] >= 3 and top[0] - second >= 2) else None
 
 SETS = [
   {
@@ -1423,29 +1442,40 @@ def build():
         mid = s["set_id"].split("-")[1]              # 13 / 19 / E10
         uk = "E" if mid.startswith("E") else mid     # 강 키
         P = PASSAGES.get(uk, {})
+        combined = (uk == "E")           # 엘리트: 전 강 통합 풀에서 매칭
         plist = [{"no": no, "title": P[no]["title"], "en": P[no]["en"], "ko": P[no]["ko"]}
                  for no in sorted(P)]
         pidx = {no: i for i, no in enumerate(sorted(P))}
+        elite_used, qkey = [], []        # 엘리트가 참조한 (강,no) 순서 / 문항별 key
         qs = []
         for n, (t, stem, lead, opts, ans, exp) in enumerate(s["items"], 1):
             assert 0 <= ans < len(opts), f"{s['set_id']} #{n} 정답 범위 오류"
             grp = GROUP[t]
-            passage_text, qidx = None, 0
-            if P and grp in PASSAGE_DEPENDENT:
+            passage_text, qidx, key = None, 0, None
+            if grp in PASSAGE_DEPENDENT and (P or combined):
                 need_cnt += 1
-                pno = _resolve_passage(uk, lead, opts)
                 ov = OVERRIDES.get(f"{tag}-{n}")
-                if pno:
-                    passage_text, qidx, mark = P[pno]["en"], pidx.get(pno, 0), pno
+                if combined:
+                    gk = _resolve_combined(lead, opts)
+                    if gk:
+                        passage_text, key, mark = PASSAGES[gk[0]][gk[1]]["en"], gk, f"{gk[0]}-{gk[1]}"
+                    else:
+                        mark = None
                 elif ov:
                     passage_text = "\n\n".join(P[no]["en"] for no in ov if no in P)
                     qidx, mark = pidx.get(ov[0], 0), "ov" + "+".join(map(str, ov))
                 else:
-                    mark = None
+                    pno = _resolve_passage(uk, lead, opts)
+                    if pno:
+                        passage_text, qidx, mark = P[pno]["en"], pidx.get(pno, 0), pno
+                    else:
+                        mark = None
                 if passage_text:
                     ok_cnt += 1
                 resolve_log.append((s["set_id"], n, t, mark))
-            # reading 문항: 강 지문이 있으면 해당 지문 index, 없으면 0
+            qkey.append(key)
+            if combined and key and key not in elite_used:
+                elite_used.append(key)
             qs.append({"id": f"V{n}", "passage": qidx, "type": t, "stem": stem,
                        "lead": lead, "options": opts, "answer": ans, "explain": exp})
             # bank 문항: 지문필수 + 매칭 성공 → 원문 지문 부착(발췌는 lead로), 아니면 기존(발췌=passage)
@@ -1456,6 +1486,14 @@ def build():
             if passage_text and lead and lead.strip():
                 d["lead"] = lead
             new_drill.append(d)
+        if combined:                     # 엘리트: 참조 지문만 모아 강 표시로 부착, 문항 index 보정
+            plist = [{"no": i + 1, "title": f"[{g}강] {PASSAGES[g][no]['title']}",
+                      "en": PASSAGES[g][no]["en"], "ko": PASSAGES[g][no]["ko"]}
+                     for i, (g, no) in enumerate(elite_used)]
+            order = {k: i for i, k in enumerate(elite_used)}
+            for q, k in zip(qs, qkey):
+                if k in order:
+                    q["passage"] = order[k]
         new_sets.append({"id": s["set_id"], "level": s["level"], "source": s["source"],
                          "title": s["title"], "passages": plist, "questions": qs})
 
