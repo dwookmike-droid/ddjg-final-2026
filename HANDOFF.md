@@ -10,6 +10,11 @@
 **배포 URL**: https://dwookmike-droid.github.io/ddjg-final-2026/ · 저장소 `dwookmike-droid/ddjg-final-2026`(Public, Pages main `/(root)`).
 **백엔드**: Apps Script 웹앱 `/exec`가 `js/config.js`의 `APPS_SCRIPT_URL`에 연결됨(라이브). 결과·진도는 그 프로젝트의 구글 스프레드시트(students·progress·results)에 쌓임. 테스트로 만든 `연결테스트`·`문구테스트` 학생 행은 시트에서 지우면 됨.
 
+## 0-6. 12차 진행분 (2026-06-23)
+- **문항 오류 신고**: 모든 bank 문항(`renderQuizItem`)·레벨독해 문항에 '⚠️ 오류 신고' 버튼. `ReportFlag`(이유 4종+메모) → `API.report`(action `report`) → 시트 **reports 탭**. 오프라인/실패 시 `Store.reportQueue` 보관, 부팅 시 `flushReports`. `toast` 추가. 캐시 v13→v14.
+- **⚠️ 사용자 액션 필요**: `apps_script/Code.gs`에 `report` 액션 추가됨 → **Apps Script 재배포(배포 관리→편집→새 버전)** 해야 신고가 시트에 쌓임(reports 탭은 자동 생성). 재배포 전까지 신고는 학생 기기에 큐로 보관되다 재배포 후 자동 전송. `/exec` URL은 새 버전이라도 유지됨.
+- **선생님 결과 확인** = `initSheet`가 만든 구글 시트(results·students·progress·reports 탭). 카카오 미사용, 시트로 확인.
+
 ## 0-5. 11차 진행분 (2026-06-23)
 - **변형 문항 원문 지문 복원**: 변형(`var-*`)이 '지문 없는 종합문항' 설계라 앱에서 내용일치·주제·제목 등이 지문 없이 노출되던 문제 해결. 노션 "올림포스 N강 시험범위 원문"에서 지문(영어+한글)을 `_build/variant_passages.py`로 옮기고(13·15·17·19강+장문), `build_variants.py`가 부착.
 - **방식**: reading 변형 14세트 전부에 강 지문 attach(L0와 동일 구조) + bank 지문필수 문항에 원문 지문 자동배정(`_resolve_passage`: lead/선지 영어 토큰 매칭, 1·2회 정답표로 21/21 검증·보수적 임계값). 엘리트는 전 강 통합 풀(`_resolve_combined`)로 강 표시 부착. 자동 실패분은 `OVERRIDES`로 수동 지정.
