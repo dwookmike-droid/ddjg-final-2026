@@ -194,6 +194,22 @@ html.dark .vchip.star{background:linear-gradient(90deg,#2f2a1c,var(--card) 40%);
 /* 체크포인트 유형별 분해 */
 .cp-breakdown{margin-top:6px;font-size:.84rem;color:var(--muted);font-weight:600;}
 
+/* ---------- 오류 신고 ---------- */
+.report-btn{display:block;margin:12px 0 0 auto;font-size:.74rem;color:var(--muted);opacity:.7;padding:4px 6px;}
+.report-btn:hover{opacity:1;color:var(--red);}
+.chip-row.wrap{flex-wrap:wrap;gap:8px;}
+.report-q{background:var(--bg);border-radius:var(--r-s);padding:10px 12px;margin:6px 0 12px;font-size:.86rem;color:var(--muted);
+  max-height:96px;overflow:auto;}
+.report-memo{width:100%;border:1.5px solid var(--line);border-radius:var(--r-s);padding:10px 12px;margin:12px 0 4px;
+  background:var(--bg);color:var(--text);font:inherit;resize:vertical;}
+.report-memo:focus{outline:none;border-color:var(--primary);}
+.report-sheet .field-label{display:block;font-size:.8rem;color:var(--muted);font-weight:700;margin:8px 0 8px;}
+.report-sheet .primary-btn{width:100%;margin-top:8px;}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translate(-50%,12px);
+  background:var(--text);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;font-size:.9rem;
+  box-shadow:var(--shadow-l);z-index:80;opacity:0;transition:.25s;max-width:90%;text-align:center;}
+.toast.show{opacity:.96;transform:translate(-50%,0);}
+
 /* 단어 상세 */
 .ws-head{display:flex;align-items:center;gap:12px;}
 .ws-audio{font-size:1.4rem;background:var(--primary-soft);width:46px;height:46px;border-radius:50%;flex-shrink:0;}

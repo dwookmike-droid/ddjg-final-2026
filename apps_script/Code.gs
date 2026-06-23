@@ -22,6 +22,7 @@ function doPost(e) {
       case 'login':        out = apiLogin(body); break;
       case 'saveProgress': out = apiSaveProgress(body); break;
       case 'submit':       out = apiSubmit(body); break;
+      case 'report':       out = apiReport(body); break;
       default:             out = { ok: false, reason: 'unknown_action' };
     }
     return json(out);
@@ -133,6 +134,13 @@ function apiSubmit(b) {
   }
   var sent = sendKakaoMemo(msg, 'https://' + (PROP.getProperty('APP_HOST') || ''));
   return { ok: true, kakao: sent };
+}
+
+/* ---------- 문항 오류 신고 ---------- */
+function apiReport(b) {
+  var rs = sheet('reports', ['ts', 'sid', 'name', 'class', 'itemId', 'where', 'reason', 'stem', 'status']);
+  rs.appendRow([new Date(), b.sid, b.student, b['class'], b.itemId, b.where, b.reason, b.stem, '신규']);
+  return { ok: true };
 }
 
 /* ---------- 카카오 '나에게 보내기' ---------- */

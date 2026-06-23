@@ -159,6 +159,8 @@ function renderQuizItem(item, host, onGraded, opts) {
     if (review) { markIdx(ow, "rq-opt", opts.chosen); afterGrade(opts.chosen === item.answer, opts.chosen == null); }
   }
   card.appendChild(fb);
+  card.appendChild(el("button", { class: "report-btn", html: "⚠️ 오류 신고",
+    onclick: () => ReportFlag.open({ id: item.id, where: `${item.group || ""} · ${item.source || item.unit || ""}`, stem: item.stem }) }));
   host.appendChild(card);
   return card;
 }

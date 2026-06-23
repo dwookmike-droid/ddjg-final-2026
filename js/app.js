@@ -12,6 +12,43 @@ function showSheet(node, opts = {}) {
   return close;
 }
 
+/* ---------- 토스트 ---------- */
+function toast(text) {
+  const t = el("div", { class: "toast", text });
+  document.body.appendChild(t);
+  requestAnimationFrame(() => t.classList.add("show"));
+  setTimeout(() => { t.classList.remove("show"); setTimeout(() => t.remove(), 300); }, 2400);
+}
+
+/* ---------- 문항 오류 신고 ---------- */
+const ReportFlag = {
+  open(ctx) {
+    let reason = "";
+    const REASONS = ["정답이 이상해요", "지문·선지 오타", "문제가 이상해요", "기타"];
+    const memo = el("textarea", { class: "report-memo", rows: "2", placeholder: "(선택) 무엇이 이상한지 적어주세요" });
+    const chips = el("div", { class: "chip-row wrap" }, REASONS.map(r => el("button", {
+      class: "pick", text: r, onclick: (e) => { reason = r; $$(".pick", chips).forEach(x => x.classList.toggle("on", x === e.target)); }
+    })));
+    const msg = el("div", { class: "login-msg" });
+    const send = el("button", { class: "primary-btn", text: "신고 보내기", onclick: async () => {
+      if (!reason) { msg.textContent = "이유를 하나 골라주세요."; return; }
+      send.disabled = true; send.textContent = "보내는 중…";
+      const full = reason + (memo.value.trim() ? " — " + memo.value.trim() : "");
+      await API.report({ itemId: ctx.id, where: ctx.where, stem: ctx.stem, reason: full });
+      close();
+      toast("⚠️ 오류 신고를 보냈어요. 고마워요!");
+    }});
+    const node = el("div", { class: "sheet report-sheet" }, [
+      el("div", { class: "sheet-grip" }),
+      el("div", { class: "menu-title", text: "문항 오류 신고" }),
+      ctx.stem ? el("div", { class: "report-q", text: ctx.stem }) : null,
+      el("label", { class: "field-label", text: "어떤 문제인가요?" }),
+      chips, memo, msg, send
+    ]);
+    const close = showSheet(node);
+  }
+};
+
 /* ---------- 퀴즈 러너 (단어 테스트: 한 문항씩) ---------- */
 const Runner = {
   run(session, title, onFinish) {
@@ -395,6 +432,7 @@ async function boot() {
   if (Store.state.student) boot2();
   else Login.render();
   API.flushQueue();
+  API.flushReports();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 

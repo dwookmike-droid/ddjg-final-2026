@@ -134,6 +134,8 @@ const Reading = {
       });
       card.appendChild(opts);
       card.appendChild(el("div", { class: "rq-explain hidden" }));
+      card.appendChild(el("button", { class: "report-btn", html: "⚠️ 오류 신고",
+        onclick: () => ReportFlag.open({ id: s.id + ":" + q.id, where: `${s.source || ""} ${q.type || ""}`.trim(), stem: q.stem }) }));
       qWrap.appendChild(card);
     });
     root.appendChild(qWrap);

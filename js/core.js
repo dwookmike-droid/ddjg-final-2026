@@ -64,7 +64,8 @@ const Store = {
       results: [],          // 제출 이력 요약
       streak: { last: null, days: 0 }
     },
-    queue: []               // 오프라인 제출 대기열
+    queue: [],              // 오프라인 제출 대기열
+    reportQueue: []         // 오류 신고 대기열(오프라인/실패 시 보관)
   },
   load() {
     try {
@@ -82,6 +83,7 @@ const Store = {
     this.state.student = null;
     this.state.progress = { vocabSeen: {}, starred: {}, wrong: [], results: [], streak: { last: null, days: 0 } };
     this.state.queue = [];
+    this.state.reportQueue = [];
   },
   bumpStreak() {
     const t = todayStr(), st = this.state.progress.streak;
@@ -177,6 +179,29 @@ const API = {
         class: Store.state.student.class, result
       });
       if (!r.ok) Store.state.queue.push(result);
+    }
+    Store.save();
+  },
+
+  // 문항 오류 신고 — reports 시트에 기록. 실패/오프라인 시 큐에 보관.
+  async report(rep) {
+    const st = Store.state.student || {};
+    const payload = { itemId: rep.itemId, where: rep.where || "", stem: (rep.stem || "").slice(0, 80),
+                      reason: rep.reason || "", sid: st.sid || "", student: st.name || "", class: st.class || "" };
+    if (!Store.state.reportQueue) Store.state.reportQueue = [];
+    if (!this.enabled) { Store.state.reportQueue.push(payload); Store.save(); return { ok: false, offline: true }; }
+    const r = await this._post("report", payload);
+    if (!r || !r.ok) { Store.state.reportQueue.push(payload); Store.save(); }
+    return r || { ok: false };
+  },
+
+  async flushReports() {
+    if (!this.enabled || !Store.state.reportQueue || !Store.state.reportQueue.length) return;
+    const q = Store.state.reportQueue.slice();
+    Store.state.reportQueue = [];
+    for (const p of q) {
+      const r = await this._post("report", p);
+      if (!r || !r.ok) Store.state.reportQueue.push(p);
     }
     Store.save();
   }
