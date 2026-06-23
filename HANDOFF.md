@@ -8,11 +8,12 @@
 학생용 인터랙티브 최종점검 웹앱(반응형 PWA). **콘텐츠·기능·변형 전사(19강까지) 완성. GitHub Pages 배포 + Apps Script 백엔드 연결 완료** — 로그인·진도 서버 동기화, 세트 결과가 구글 시트(results 탭)에 자동 기록. **카카오 자동전송은 안 씀**(선생님이 시트로 확인). 남은 선택: 엘리트 6~9회 전사. 시험일 **2026-07-03(금)**.
 
 **배포 URL**: https://dwookmike-droid.github.io/ddjg-final-2026/ · 저장소 `dwookmike-droid/ddjg-final-2026`(Public, Pages main `/(root)`).
-**백엔드**: Apps Script 웹앱 `/exec`가 `js/config.js`의 `APPS_SCRIPT_URL`에 연결됨(라이브). 결과·진도는 그 프로젝트의 구글 스프레드시트(students·progress·results)에 쌓임. 테스트로 만든 `연결테스트`·`문구테스트` 학생 행은 시트에서 지우면 됨.
+**백엔드**: Apps Script 웹앱 `/exec`가 `js/config.js`의 `APPS_SCRIPT_URL`에 연결됨(라이브, 캐시 v15 기준 신규 배포 URL `AKfycbyeppr…SlihAgnz1Q`). 결과·진도·신고는 그 프로젝트의 구글 스프레드시트에 쌓임.
+**선생님 대시보드(스프레드시트)**: https://docs.google.com/spreadsheets/d/1VIzU3Ivk2U-OgplDzefvbK346V30w95g1A8SPpC8nmk/edit — 탭: students·progress·results·reports. (`/exec?info=1`로 URL 재조회 가능.) 테스트 행 `연결테스트`·`문구테스트`·`신고테스트`·`신고검증`·`점검`은 지워도 됨.
 
 ## 0-6. 12차 진행분 (2026-06-23)
 - **문항 오류 신고**: 모든 bank 문항(`renderQuizItem`)·레벨독해 문항에 '⚠️ 오류 신고' 버튼. `ReportFlag`(이유 4종+메모) → `API.report`(action `report`) → 시트 **reports 탭**. 오프라인/실패 시 `Store.reportQueue` 보관, 부팅 시 `flushReports`. `toast` 추가. 캐시 v13→v14.
-- **⚠️ 사용자 액션 필요**: `apps_script/Code.gs`에 `report` 액션 추가됨 → **Apps Script 재배포(배포 관리→편집→새 버전)** 해야 신고가 시트에 쌓임(reports 탭은 자동 생성). 재배포 전까지 신고는 학생 기기에 큐로 보관되다 재배포 후 자동 전송. `/exec` URL은 새 버전이라도 유지됨.
+- **재배포 완료(신규 URL)**: 사용자가 '새 배포'로 진행해 `/exec`가 바뀜 → `config.js` URL 교체·재배포(캐시 v15). `report`·`?info=1` 활성, 신고 end-to-end `ok` 확인. 같은 프로젝트라 시트는 동일. `Code.gs`에 `doGet ?info=1`(시트 URL 조회)도 추가됨.
 - **선생님 결과 확인** = `initSheet`가 만든 구글 시트(results·students·progress·reports 탭). 카카오 미사용, 시트로 확인.
 
 ## 0-5. 11차 진행분 (2026-06-23)
