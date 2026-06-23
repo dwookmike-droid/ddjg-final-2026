@@ -36,6 +36,10 @@ function doGet(e) {
   if (e && e.parameter && e.parameter.code) {
     return ContentService.createTextOutput(kakaoExchangeCode(e.parameter.code));
   }
+  if (e && e.parameter && e.parameter.info) {   // 시트 URL 조회(대시보드 찾기용)
+    var id = PROP.getProperty('SHEET_ID');
+    return json({ ok: !!id, sheetUrl: id ? ('https://docs.google.com/spreadsheets/d/' + id + '/edit') : null });
+  }
   return ContentService.createTextOutput('OK · 동대전고2 기말 파이널 백엔드 작동 중');
 }
 
