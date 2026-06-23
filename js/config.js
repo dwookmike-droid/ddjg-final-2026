@@ -5,7 +5,7 @@ window.CONFIG = {
   // Google Apps Script 웹앱 배포 URL (배포 후 붙여넣기).
   // 비워두면 '로컬 전용 모드'로 동작 — 로그인/진도/시험은 기기에만 저장되고
   // 카톡 전송은 안 됩니다(앱 기능 테스트는 그대로 가능).
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyee-9g0Hpl4UuiIEb5FNp0hDAgmBp7iNm4wqH7r6ALBmjThMBsFyPKBQMiWahYSbsO8A/exec",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyepprPKgoihKe8boUifH6J31Bpuo7M4MLCryxlPKBS8UeLIWR_jDKsPZJ8SlihAgnz1Q/exec",
 
   // 카카오 JavaScript 키 (학생용 '결과 공유하기' 버튼에만 사용 — 선택).
   // 자동 카톡 전송은 Apps Script가 처리하므로 이 키가 없어도 됩니다.
