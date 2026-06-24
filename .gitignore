@@ -21,3 +21,11 @@ venv/
 
 # 로컬 서버 로그 등
 *.log
+
+# 데이터 백업본
+*.bak
+
+# TTS API 키 (절대 커밋 금지)
+_build/.ttskey
+_build/.tts_env
+.env

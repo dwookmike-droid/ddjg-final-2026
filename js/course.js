@@ -95,6 +95,7 @@ const Menu = {
       el("div", { class: "toc-cap", text: "범위 · 눌러서 이동" }),
       toc,
       el("div", { class: "drawer-divider" }),
+      item("🧭", "학습 가이드", () => openSub("학습 가이드", r => StudyGuide.render(r))),
       item("▶", "이어서 학습", () => Course.render()),
       item("📊", "학습 현황", () => openSub("학습 현황", r => Home.render(r))),
       item("📖", "단어장 사전", () => openSub("단어장 사전", r => VocabDict.render(r))),

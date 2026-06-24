@@ -75,16 +75,45 @@ const Reading = {
     const t0 = Date.now();
     const answers = {};   // qid -> index
 
-    // 지문 없는 변형 회차: 각 문항에 인용이 포함된다는 안내
-    if (!s.passages.length) {
+    // 문항을 지문별 / 크로스 / 예외로 분류 (passage = 0-기반 지문 인덱스)
+    const np = s.passages.length;
+    const byP = Array.from({ length: np }, () => []);
+    const crossQ = [];
+    const orphan = [];
+    s.questions.forEach((q, i) => {
+      const entry = [q, i + 1];               // [문항, 원본번호]
+      if (q.cross) crossQ.push(entry);
+      else if (Number.isInteger(q.passage) && q.passage >= 0 && q.passage < np) byP[q.passage].push(entry);
+      else orphan.push(entry);
+    });
+
+    // 상단 가이드: 몇 번 문제가 어느 지문인지
+    if (np) {
+      const guide = el("div", { class: "rq-guide" });
+      guide.appendChild(el("div", { class: "rq-guide-h", text: "📋 지문별 문항 안내 — 각 지문 바로 아래에 그 지문으로 푸는 문제가 있어요" }));
+      s.passages.forEach((p, j) => {
+        const nums = byP[j].map(e => e[1]);
+        guide.appendChild(el("div", { class: "rq-guide-row" }, [
+          el("span", { class: "rq-guide-p", text: `지문 ${j + 1}. ${p.title}` }),
+          el("span", { class: "rq-guide-q", text: nums.length ? "문제 " + nums.join(", ") : "(연결 문항 없음)" })
+        ]));
+      });
+      if (crossQ.length) {
+        guide.appendChild(el("div", { class: "rq-guide-row cross" }, [
+          el("span", { class: "rq-guide-p", text: "🔀 크로스·통합" }),
+          el("span", { class: "rq-guide-q", text: "문제 " + crossQ.map(e => e[1]).join(", ") })
+        ]));
+      }
+      root.appendChild(guide);
+    } else {
       root.appendChild(el("div", { class: "variant-note muted", text: "📝 영어 선지 종합 변형 회차예요. 지문은 각 문항에 인용으로 주어집니다." }));
     }
 
-    // 지문들
-    s.passages.forEach(p => {
+    // 지문 + 그 지문에 속한 문항을 함께 렌더
+    s.passages.forEach((p, j) => {
       const box = el("div", { class: "passage-box" });
       box.appendChild(el("div", { class: "passage-head" }, [
-        el("span", { class: "passage-no", text: "지문 " + p.no }),
+        el("span", { class: "passage-no", text: "지문 " + (j + 1) }),
         el("span", { class: "passage-title", text: p.title })
       ]));
       if (p.topic) box.appendChild(el("div", { class: "passage-topic", text: "💡 " + p.topic }));
@@ -138,35 +167,29 @@ const Reading = {
         box.appendChild(vt);
       }
       root.appendChild(box);
+
+      // 이 지문으로 푸는 문항을 지문 바로 아래에 배치
+      if (byP[j].length) {
+        const qw = el("div", { class: "q-wrap under" });
+        qw.appendChild(el("div", { class: "q-group-h", text: `📝 지문 ${j + 1} 문제 (${byP[j].map(e => e[1]).join(", ")}번)` }));
+        byP[j].forEach(e => qw.appendChild(this._qcard(s, e[0], e[1], answers)));
+        root.appendChild(qw);
+      }
     });
 
-    // 문항들
-    const qWrap = el("div", { class: "q-wrap" });
-    s.questions.forEach((q, qi) => {
-      const card = el("div", { class: "rq-card", "data-qid": q.id });
-      card.appendChild(el("div", { class: "rq-head" }, [
-        el("span", { class: "rq-type", text: q.type }),
-        el("span", { class: "rq-stem", text: `${qi + 1}. ${q.stem}` })
-      ]));
-      if (q.lead) card.appendChild(el("div", { class: "rq-lead", text: q.lead }));
-      const opts = el("div", { class: "rq-opts" });
-      q.options.forEach((o, oi) => {
-        opts.appendChild(el("button", {
-          class: "rq-opt", "data-oi": oi,
-          html: `<span class="oc">${CIRCLED[oi]}</span><span>${esc(o)}</span>`,
-          onclick: (e) => {
-            answers[q.id] = oi;
-            $$(".rq-opt", opts).forEach(b => b.classList.toggle("sel", b === e.currentTarget));
-          }
-        }));
-      });
-      card.appendChild(opts);
-      card.appendChild(el("div", { class: "rq-explain hidden" }));
-      card.appendChild(el("button", { class: "report-btn", html: "⚠️ 오류 신고",
-        onclick: () => ReportFlag.open({ id: s.id + ":" + q.id, where: `${s.source || ""} ${q.type || ""}`.trim(), stem: q.stem }) }));
-      qWrap.appendChild(card);
-    });
-    root.appendChild(qWrap);
+    // 크로스·통합 문항 (여러 지문을 묶어 푸는 문제 — 비교 자료는 문제 안에 포함)
+    if (crossQ.length) {
+      const cw = el("div", { class: "q-wrap cross-wrap" });
+      cw.appendChild(el("div", { class: "q-group-h cross", text: "🔀 크로스·통합 문제 — 여러 지문을 묶어 푸는 문제예요 (비교 자료는 문제 안에 있어요)" }));
+      crossQ.forEach(e => cw.appendChild(this._qcard(s, e[0], e[1], answers)));
+      root.appendChild(cw);
+    }
+    // 예외(지문 미연결) 문항
+    if (orphan.length) {
+      const ow = el("div", { class: "q-wrap" });
+      orphan.forEach(e => ow.appendChild(this._qcard(s, e[0], e[1], answers)));
+      root.appendChild(ow);
+    }
 
     root.appendChild(el("button", {
       class: "primary-btn big", text: "채점하기 ✓",
@@ -174,11 +197,38 @@ const Reading = {
         if (Object.keys(answers).length < s.questions.length) {
           if (!confirm("아직 안 푼 문항이 있어요. 그래도 채점할까요?")) return;
         }
-        this._grade(s, answers, qWrap, t0);
+        this._grade(s, answers, root, t0);
         e.target.remove();
       }
     }));
     window.scrollTo(0, 0);
+  },
+
+  // 문항 카드 1개 생성 (n = 화면 표시 번호)
+  _qcard(s, q, n, answers) {
+    const card = el("div", { class: "rq-card", "data-qid": q.id });
+    card.appendChild(el("div", { class: "rq-head" }, [
+      el("span", { class: "rq-type", text: q.type }),
+      el("span", { class: "rq-stem", text: `${n}. ${q.stem}` })
+    ]));
+    if (q.selfContained && q.lead) card.appendChild(el("div", { class: "rq-selftag", text: "📎 아래 문장만 보고 풀어요 (지문 전체 안 봐도 됨)" }));
+    if (q.lead) card.appendChild(el("div", { class: "rq-lead", text: q.lead }));
+    const opts = el("div", { class: "rq-opts" });
+    q.options.forEach((o, oi) => {
+      opts.appendChild(el("button", {
+        class: "rq-opt", "data-oi": oi,
+        html: `<span class="oc">${CIRCLED[oi]}</span><span>${esc(o)}</span>`,
+        onclick: (e) => {
+          answers[q.id] = oi;
+          $$(".rq-opt", opts).forEach(b => b.classList.toggle("sel", b === e.currentTarget));
+        }
+      }));
+    });
+    card.appendChild(opts);
+    card.appendChild(el("div", { class: "rq-explain hidden" }));
+    card.appendChild(el("button", { class: "report-btn", html: "⚠️ 오류 신고",
+      onclick: () => ReportFlag.open({ id: s.id + ":" + q.id, where: `${s.source || ""} ${q.type || ""}`.trim(), stem: q.stem }) }));
+    return card;
   },
 
   _grade(s, answers, qWrap, t0) {

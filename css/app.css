@@ -107,6 +107,46 @@ html.dark .streak{background:#3a2d18;}
 .rec-label{font-size:.72rem;color:var(--primary);font-weight:700;}
 .rec-text{font-weight:600;}
 
+/* ---------- 학습 가이드 ---------- */
+.guide-entry{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:14px 0;
+  background:linear-gradient(135deg,var(--primary),var(--purple));color:#fff;border-radius:var(--r);
+  padding:14px 16px;box-shadow:var(--shadow);}
+.guide-entry:active{transform:scale(.98);}
+.ge-ic{font-size:1.6rem;flex-shrink:0;}
+.ge-body{flex:1;display:flex;flex-direction:column;gap:2px;}
+.ge-title{font-weight:800;font-size:1.02rem;}
+.ge-sub{font-size:.78rem;opacity:.92;}
+.ge-go{font-size:1.5rem;opacity:.85;}
+.guide-rec{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;margin:6px 0 4px;
+  background:var(--primary-soft);border:1.5px solid var(--primary);border-radius:var(--r);padding:15px 16px;}
+.guide-rec:active{transform:scale(.99);}
+.gr-label{font-size:.72rem;font-weight:800;color:var(--primary-d);}
+.gr-title{font-size:1.15rem;font-weight:800;}
+.gr-purpose{font-size:.86rem;color:var(--text);line-height:1.5;opacity:.85;}
+.gr-go{font-size:.9rem;font-weight:800;color:var(--primary-d);margin-top:2px;}
+.guide-steps{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.guide-step{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:13px 14px;box-shadow:var(--shadow);}
+.guide-step:active{transform:scale(.99);}
+.guide-step.now{border-color:var(--primary);border-width:1.5px;background:var(--primary-soft);}
+.guide-step.done{opacity:.72;}
+.gs-num{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.85rem;background:var(--line);color:var(--muted);}
+.guide-step.now .gs-num{background:var(--primary);color:#fff;}
+.guide-step.done .gs-num{background:var(--ok);color:#fff;}
+.gs-body{flex:1;display:flex;flex-direction:column;gap:4px;}
+.gs-titlerow{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.gs-title{font-weight:800;font-size:.98rem;}
+.gs-badge{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap;background:var(--line);color:var(--muted);}
+.gs-badge.now{background:var(--primary);color:#fff;}
+.gs-badge.done{background:var(--ok);color:#fff;}
+.gs-purpose{font-size:.83rem;line-height:1.5;color:var(--text);opacity:.82;}
+.gs-meta{font-size:.74rem;color:var(--muted);font-weight:700;}
+.gs-go{font-size:1.4rem;color:var(--muted);flex-shrink:0;align-self:center;}
+.guide-usage{display:flex;flex-direction:column;gap:9px;background:var(--bg);border-radius:var(--r-s);padding:13px 14px;margin-top:8px;}
+.usage-item{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;line-height:1.5;}
+.ui-ic{flex-shrink:0;width:22px;text-align:center;}
+
 /* ---------- 탭/검색 ---------- */
 .tabs{display:flex;gap:7px;margin-bottom:10px;}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;}
@@ -322,6 +362,23 @@ html.dark .res-send.warn{background:#3a2d18;}
 .pv-ko{color:var(--muted);}
 
 .q-wrap{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
+.q-wrap.under{margin:2px 0 18px;}
+.q-group-h{font-weight:800;font-size:.86rem;color:var(--primary-d);background:var(--primary-soft);
+  border-radius:8px;padding:8px 12px;}
+.q-group-h.cross{color:#fff;background:linear-gradient(90deg,var(--purple),var(--primary));}
+.cross-wrap{border-top:2px dashed var(--line);padding-top:14px;margin-top:4px;}
+/* 지문별 문항 안내 가이드 */
+.rq-guide{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--primary);
+  border-radius:var(--r-s);box-shadow:var(--shadow);padding:12px 14px;margin-bottom:14px;}
+.rq-guide-h{font-weight:800;font-size:.84rem;color:var(--primary-d);margin-bottom:8px;line-height:1.4;}
+.rq-guide-row{display:flex;gap:8px;justify-content:space-between;align-items:baseline;
+  padding:5px 0;border-top:1px solid var(--line);font-size:.85rem;}
+.rq-guide-row:first-of-type{border-top:none;}
+.rq-guide-p{font-weight:700;flex:1;}
+.rq-guide-q{color:var(--primary-d);font-weight:800;white-space:nowrap;}
+.rq-guide-row.cross .rq-guide-p,.rq-guide-row.cross .rq-guide-q{color:var(--purple);}
+.rq-selftag{display:inline-block;font-size:.74rem;font-weight:700;color:var(--orange);
+  background:var(--bg);border-radius:6px;padding:3px 8px;margin:6px 0 2px;}
 .rq-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;}
 .rq-head{display:flex;gap:8px;align-items:baseline;margin-bottom:6px;}
 .rq-type{background:var(--bg);color:var(--purple);font-size:.7rem;font-weight:800;padding:3px 8px;border-radius:5px;flex-shrink:0;}

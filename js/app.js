@@ -186,6 +186,7 @@ const Router = {
   main: null, view: "home",
   SUB: {
     home:     ["학습 현황", r => Home.render(r)],
+    guide:    ["학습 가이드", r => StudyGuide.render(r)],
     dict:     ["단어장 사전", r => VocabDict.render(r)],
     test:     ["단어 시험", r => VocabTest.setup(r)],
     reading:  ["독해 시험", r => Reading.render(r)],
@@ -284,6 +285,15 @@ const Home = {
     ].map(([l, v]) => el("div", { class: "stat" }, [
       el("div", { class: "stat-v", text: String(v) }), el("div", { class: "stat-l", text: l })
     ]))));
+
+    root.appendChild(el("button", { class: "guide-entry", onclick: () => Router.go("guide") }, [
+      el("span", { class: "ge-ic", text: "🧭" }),
+      el("span", { class: "ge-body" }, [
+        el("span", { class: "ge-title", text: "공부 어디서부터? 학습 가이드" }),
+        el("span", { class: "ge-sub", text: "단계별 순서·목적·오늘 추천을 알려줘요" })
+      ]),
+      el("span", { class: "ge-go", text: "›" })
+    ]));
 
     root.appendChild(el("div", { class: "module-grid" }, [
       this._tile("📖", "단어장", "뜻·동의어·발음", "dict", "blue"),
@@ -444,7 +454,8 @@ function loadKakao() {
 
 function boot2() {
   App.init();
-  Course.start();
+  Course.start();                                   // 코스 빌드(뒤로가기·CTA 안전) + 기본 진입
+  if (StudyGuide.shouldAutoShow()) openSub("학습 가이드", r => StudyGuide.render(r));  // 첫 진입 학생엔 가이드 먼저
 }
 
 document.addEventListener("DOMContentLoaded", boot);
