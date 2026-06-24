@@ -1,6 +1,6 @@
 # 핸드오프 — 기말 파이널 인터랙티브 웹앱
 
-작성 2026-06-22(갱신 2026-06-23 11차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브, 현재 캐시 v13) + 백엔드(Apps Script) 연결 완료** — 서버 동기화·결과 시트 기록 ON. **카카오 자동전송은 미사용** — 선생님이 시트로 결과 확인.
+작성 2026-06-22(갱신 2026-06-23 13차). **새 세션은 이 파일을 먼저 읽고** 이어서 진행할 것. **배포 완료(GitHub Pages 라이브, 현재 캐시 v16) + 백엔드(Apps Script) 연결 완료** — 서버 동기화·결과 시트 기록·오류 신고 ON. **카카오 자동전송은 미사용** — 선생님이 시트로 결과 확인.
 루트(절대경로): `/Users/dongwookkang/Library/Mobile Documents/com~apple~CloudDocs/2025년/2025 과외/1. 동대전고 과외/26년 고2/내신/1학기/기말고사/00_최종배포/finalcheck_webapp/`
 같이 볼 문서: 이 폴더의 [README.md](README.md)(구조)·[SETUP.md](SETUP.md)(배포). 메모리: `finalcheck-webapp`.
 
@@ -10,6 +10,12 @@
 **배포 URL**: https://dwookmike-droid.github.io/ddjg-final-2026/ · 저장소 `dwookmike-droid/ddjg-final-2026`(Public, Pages main `/(root)`).
 **백엔드**: Apps Script 웹앱 `/exec`가 `js/config.js`의 `APPS_SCRIPT_URL`에 연결됨(라이브, 캐시 v15 기준 신규 배포 URL `AKfycbyeppr…SlihAgnz1Q`). 결과·진도·신고는 그 프로젝트의 구글 스프레드시트에 쌓임.
 **선생님 대시보드(스프레드시트)**: https://docs.google.com/spreadsheets/d/1VIzU3Ivk2U-OgplDzefvbK346V30w95g1A8SPpC8nmk/edit — 탭: students·progress·results·reports. (`/exec?info=1`로 URL 재조회 가능.) 테스트 행 `연결테스트`·`문구테스트`·`신고테스트`·`신고검증`·`점검`은 지워도 됨.
+
+## 0-7. 13차 진행분 (2026-06-23)
+- **실전 모의고사 20→30문항**: `Mock.PLAN`(quiz.js) 30(내용일치3·독해3·순서4·주제5·어휘5·어법4·빈칸6). 리뷰 상세풀이=기존 `renderQuizItem(review)`(explain+Guide steps/warn), `guide.json` 전략 warn 4개(순서·삽입/어휘/내용일치/독해) 보강.
+- **지문 TTS 문장 카라오케**: `core.js` `Karaoke`(문장단위 Web Speech, splitSents/play/stop). `reading.js openSet` 지문을 문장 span(`.kk-sent`/`.kk-ko`, 단어탭 유지) + ▶따라읽기 버튼 → 현재 문장 영어+한글 동시 강조(`.kk-on`)·자동 스크롤. 새 오디오 없음. (코스 rpassage엔 미적용, 동일 유틸 재사용 가능.)
+- **단어 '🎯 이번 시험 포인트' 팝업**: `_build/build_wordpoints.py`(변형 어휘 해설 + synant 교차검증, 확실한 것만)→`data/wordpoints.json`(19단어). `core.js` Data.wordpoints/`Data.point`, `vocab.js openWordSheet`에 포인트 박스(synant 팁 + 함정/정의 노트). 중요 단어만 노출.
+- 캐시 v15→v16. **미구현(기획안 보관, 플랜 파일)**: 단어 게이미피케이션(숙련도·마스터리 대시보드·약점복습·배지), 받아쓰기/슬래시읽기/SRS/데일리미션.
 
 ## 0-6. 12차 진행분 (2026-06-23)
 - **문항 오류 신고**: 모든 bank 문항(`renderQuizItem`)·레벨독해 문항에 '⚠️ 오류 신고' 버튼. `ReportFlag`(이유 4종+메모) → `API.report`(action `report`) → 시트 **reports 탭**. 오프라인/실패 시 `Store.reportQueue` 보관, 부팅 시 `flushReports`. `toast` 추가. 캐시 v13→v14.
