@@ -244,6 +244,43 @@ const Audio2 = {
 };
 
 /* ===========================================================
+ *  KARAOKE — 지문 문장단위 TTS 따라읽기 (Web Speech)
+ * =========================================================== */
+const Karaoke = {
+  active: false,
+  splitSents(str) {
+    return (String(str || "").match(/[^.!?]+[.!?]+|[^.!?]+$/g) || []).map(s => s.trim()).filter(Boolean);
+  },
+  _voice() {
+    try { return (speechSynthesis.getVoices() || []).filter(v => /en[-_]US/i.test(v.lang))[0] || null; }
+    catch (e) { return null; }
+  },
+  play(sents, onSent, onEnd) {
+    if (!("speechSynthesis" in window)) { alert("이 브라우저는 음성 읽기를 지원하지 않아요."); return false; }
+    this.stop();
+    this.active = true;
+    let i = 0;
+    const next = () => {
+      if (!this.active || i >= sents.length) { this.active = false; onEnd && onEnd(); return; }
+      const u = new SpeechSynthesisUtterance(sents[i]);
+      u.lang = "en-US"; u.rate = 0.9;
+      const v = this._voice(); if (v) u.voice = v;
+      const cur = i;
+      u.onstart = () => { if (this.active) onSent && onSent(cur); };
+      u.onend = () => { i++; next(); };
+      u.onerror = () => { i++; next(); };
+      speechSynthesis.speak(u);
+    };
+    next();
+    return true;
+  },
+  stop() {
+    this.active = false;
+    try { speechSynthesis.cancel(); } catch (e) {}
+  }
+};
+
+/* ===========================================================
  *  DATA — JSON 로더
  * =========================================================== */
 const Data = {
@@ -255,6 +292,7 @@ const Data = {
       fetch("data/reading.json").then(x => x.json())
     ]);
     this.vocab = v; this.synant = s; this.reading = r;
+    this.wordpoints = await fetch("data/wordpoints.json").then(x => x.json()).catch(() => ({}));
     // 평탄화: 모든 단어 색인
     this.allWords = [];
     this.byEn = {};
@@ -265,5 +303,6 @@ const Data = {
       if (!this.byEn[k]) this.byEn[k] = item;   // 첫 등장 우선
     })));
   },
-  sa(en) { return this.synant[String(en).toLowerCase()] || null; }
+  sa(en) { return this.synant[String(en).toLowerCase()] || null; },
+  point(en) { return (this.wordpoints && this.wordpoints[String(en).toLowerCase()]) || null; }
 };

@@ -8,6 +8,7 @@ function openWordSheet(en) {
   const sa = Data.sa(en);
   const seen = Store.state.progress.vocabSeen[en.toLowerCase()] || 0;
   const starred = !!Store.state.progress.starred[en.toLowerCase()];
+  const pt = Data.point(en);   // 이번 시험 포인트(함정·정의)
 
   const badge = item.src === "school"
     ? el("span", { class: "src-badge school", text: "학교" })
@@ -46,6 +47,11 @@ function openWordSheet(en) {
     el("div", { class: "ws-ko", text: item.ko || "(뜻 정보 없음)" }),
     item.deckLabel ? el("div", { class: "ws-meta", text: `${item.deckLabel}${item.passage ? " · " + item.passage : ""}` }) : null,
     saRows.length ? el("div", { class: "ws-sa" }, saRows) : null,
+    (saRows.length || (pt && pt.notes && pt.notes.length)) ? el("div", { class: "ws-point" }, [
+      el("div", { class: "ws-point-h", text: "🎯 이번 시험 포인트" }),
+      saRows.length ? el("div", { class: "ws-point-tip", text: "동대전고 빈출 — 동의어/반의어 교체에 주의 (위 = · ↔ 확인)" }) : null,
+      ...((pt && pt.notes) ? pt.notes.map(n => el("div", { class: "ws-point-note", text: "• " + n })) : [])
+    ]) : null,
     el("div", { class: "ws-read" }, [
       el("span", { class: "ws-read-label", text: "회독" }),
       ...[1, 2, 3].map(n => el("button", {

@@ -194,6 +194,19 @@ html.dark .vchip.star{background:linear-gradient(90deg,#2f2a1c,var(--card) 40%);
 /* 체크포인트 유형별 분해 */
 .cp-breakdown{margin-top:6px;font-size:.84rem;color:var(--muted);font-weight:600;}
 
+/* ---------- 단어 시험 포인트 ---------- */
+.ws-point{margin-top:12px;background:var(--primary-soft);border-radius:var(--r-s);padding:11px 13px;}
+.ws-point-h{font-weight:800;font-size:.9rem;color:var(--primary-d);margin-bottom:5px;}
+.ws-point-tip{font-size:.84rem;color:var(--text);font-weight:600;}
+.ws-point-note{font-size:.84rem;color:var(--text);margin-top:5px;line-height:1.45;}
+
+/* ---------- 지문 따라읽기(TTS 카라오케) ---------- */
+.kk-bar{display:flex;justify-content:flex-end;margin-bottom:6px;}
+.kk-btn{font-size:.82rem;font-weight:800;color:var(--primary);background:var(--primary-soft);border-radius:999px;padding:7px 14px;}
+.kk-sent{border-radius:4px;transition:background .15s;}
+.kk-sent.kk-on{background:rgba(240,165,0,.28);box-shadow:0 0 0 2px rgba(240,165,0,.5);}
+.kk-ko.kk-on{background:rgba(240,165,0,.22);font-weight:700;border-radius:4px;}
+
 /* ---------- 오류 신고 ---------- */
 .report-btn{display:block;margin:12px 0 0 auto;font-size:.74rem;color:var(--muted);opacity:.7;padding:4px 6px;}
 .report-btn:hover{opacity:1;color:var(--red);}

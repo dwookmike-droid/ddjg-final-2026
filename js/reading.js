@@ -67,7 +67,7 @@ const Reading = {
     const root = Router.main; root.innerHTML = "";
     const isL0 = s.level === "L0";
     root.appendChild(el("div", { class: "page-head" }, [
-      el("button", { class: "back", text: "← 목록", onclick: () => Router.go("reading") }),
+      el("button", { class: "back", text: "← 목록", onclick: () => { Karaoke.stop(); Router.go("reading"); } }),
       el("h2", { text: s.title }),
       el("p", { class: "muted", text: `${s.source} · ${s.level}` })
     ]));
@@ -88,14 +88,42 @@ const Reading = {
         el("span", { class: "passage-title", text: p.title })
       ]));
       if (p.topic) box.appendChild(el("div", { class: "passage-topic", text: "💡 " + p.topic }));
-      box.appendChild(el("p", { class: "passage-en" }, [tappableText(p.en)]));
-      // 해석 토글 (L0 기본 펼침)
-      const ko = el("div", { class: "passage-ko" + (isL0 ? "" : " hidden"), text: p.ko });
+      // 따라 읽기(문장단위 TTS 노래방) + 영어 지문(문장 span, 단어 탭 유지)
+      const enSents = Karaoke.splitSents(p.en);
+      const koSents = Karaoke.splitSents(p.ko);
+      const enSpans = [], koSpans = [];
+      const playBtn = el("button", { class: "kk-btn", html: "▶ 따라 읽기" });
+      box.appendChild(el("div", { class: "kk-bar" }, [playBtn]));
+      const enP = el("p", { class: "passage-en" });
+      enSents.forEach(sent => {
+        const sp = el("span", { class: "kk-sent" }, [tappableText(sent)]);
+        enSpans.push(sp); enP.appendChild(sp); enP.appendChild(document.createTextNode(" "));
+      });
+      box.appendChild(enP);
+      // 해석(문장 span) 토글
+      const ko = el("div", { class: "passage-ko" + (isL0 ? "" : " hidden") });
+      koSents.forEach(sent => { const sp = el("span", { class: "kk-ko" }, [document.createTextNode(sent + " ")]); koSpans.push(sp); ko.appendChild(sp); });
       box.appendChild(el("button", {
         class: "toggle-btn", text: isL0 ? "한글 해석 접기 ▲" : "한글 해석 보기 ▼",
         onclick: (e) => { ko.classList.toggle("hidden"); e.target.textContent = ko.classList.contains("hidden") ? "한글 해석 보기 ▼" : "한글 해석 접기 ▲"; }
       }));
       box.appendChild(ko);
+      // 재생 제어
+      const clearHl = () => { enSpans.forEach(x => x.classList.remove("kk-on")); koSpans.forEach(x => x.classList.remove("kk-on")); };
+      playBtn.onclick = () => {
+        if (Karaoke.active) { Karaoke.stop(); clearHl(); playBtn.innerHTML = "▶ 따라 읽기"; return; }
+        $$(".kk-on", root).forEach(x => x.classList.remove("kk-on"));
+        $$(".kk-btn", root).forEach(b => { if (b !== playBtn) b.innerHTML = "▶ 따라 읽기"; });
+        ko.classList.remove("hidden");
+        playBtn.innerHTML = "⏸ 정지";
+        const ok = Karaoke.play(enSents, (i) => {
+          clearHl();
+          if (enSpans[i]) { enSpans[i].classList.add("kk-on"); enSpans[i].scrollIntoView({ block: "center", behavior: "smooth" }); }
+          const ki = koSents.length ? Math.min(koSents.length - 1, Math.round(i * koSents.length / Math.max(1, enSents.length))) : -1;
+          if (ki >= 0 && koSpans[ki]) koSpans[ki].classList.add("kk-on");
+        }, () => { clearHl(); playBtn.innerHTML = "▶ 따라 읽기"; });
+        if (!ok) playBtn.innerHTML = "▶ 따라 읽기";
+      };
       // 핵심 어휘
       if (p.vocab && p.vocab.length) {
         const vt = el("div", { class: "passage-vocab hidden" },
