@@ -227,7 +227,7 @@ const Login = {
       btn.disabled = false;
       if (!r.ok) { msg.textContent = r.reason === "pin" ? "PIN이 일치하지 않아요." : "연결에 실패했어요. 다시 시도하세요."; return; }
       Store.state.student = { name: nm, class: klass, sid: r.sid };
-      if (r.progress) Object.assign(Store.state.progress, r.progress);  // 서버 진도 채택(기기 동기화)
+      if (r.progress) Store.mergeProgress(r.progress);  // 서버 진도 병합(기기 동기화·유실 방지)
       Store.save();
       boot2();
     };
@@ -439,8 +439,19 @@ async function boot() {
   await Guide.load();
   Audio2.init();
   if (CONFIG.KAKAO_JS_KEY) loadKakao();
-  if (Store.state.student) boot2();
-  else Login.render();
+  if (Store.state.student) {
+    // 재진입: 서버 최신 진도를 받아 로컬과 병합(다른 기기서 한 기록 유실 방지)
+    try {
+      const sp = await API.getProgress(Store.state.student.sid);
+      if (sp) { Store.mergeProgress(sp); Store.save(); }
+    } catch (e) {}
+    boot2();
+  } else {
+    Login.render();
+  }
+  // 앱을 떠날 때 진도를 즉시 서버로 저장(throttle 우회) — 급히 닫아도 유실 방지
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") API.flushNow(); });
+  window.addEventListener("pagehide", () => API.flushNow());
   API.flushQueue();
   API.flushReports();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});

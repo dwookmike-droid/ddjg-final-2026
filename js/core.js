@@ -104,6 +104,44 @@ const Store = {
   },
   clearWrong(pred) {
     this.state.progress.wrong = this.state.progress.wrong.filter(x => !pred(x));
+  },
+
+  // 서버 진도를 로컬과 '병합'(어느 쪽도 잃지 않게). 덮어쓰기 금지.
+  mergeProgress(remote) {
+    if (!remote || typeof remote !== "object") return;
+    const p = this.state.progress;
+    p.vocabSeen = p.vocabSeen || {}; p.starred = p.starred || {};
+    p.wrong = p.wrong || []; p.results = p.results || [];
+    // 단어 회독수: 더 많은 쪽
+    const rv = remote.vocabSeen || {};
+    for (const k in rv) p.vocabSeen[k] = Math.max(p.vocabSeen[k] || 0, rv[k] || 0);
+    // 모르는 단어: 합집합
+    Object.assign(p.starred, remote.starred || {});
+    // 오답: key별 합집합(최신 when 유지)
+    if (Array.isArray(remote.wrong)) {
+      const by = {};
+      [...p.wrong, ...remote.wrong].forEach(w => {
+        const k = (w.type || "") + "|" + (w.key || "");
+        if (!by[k] || (w.when || 0) >= (by[k].when || 0)) by[k] = w;
+      });
+      p.wrong = Object.values(by).sort((a, b) => (a.when || 0) - (b.when || 0));
+      if (p.wrong.length > 500) p.wrong = p.wrong.slice(-500);
+    }
+    // 결과: (section|when|score) 기준 합집합·중복제거
+    if (Array.isArray(remote.results)) {
+      const seen = {}, out = [];
+      [...(p.results || []), ...remote.results].forEach(r => {
+        const k = (r.section || "") + "|" + (r.when || 0) + "|" + (r.score || 0);
+        if (!seen[k]) { seen[k] = 1; out.push(r); }
+      });
+      p.results = out.sort((a, b) => (a.when || 0) - (b.when || 0));
+    }
+    // 코스 진행: 더 앞선 위치 / 완료구간 OR
+    if (typeof remote.courseIdx === "number") p.courseIdx = Math.max(p.courseIdx || 0, remote.courseIdx);
+    if (remote.courseVer != null) p.courseVer = remote.courseVer;
+    if (remote.courseDone) { p.courseDone = p.courseDone || {}; for (const k in remote.courseDone) if (remote.courseDone[k]) p.courseDone[k] = remote.courseDone[k]; }
+    // 스트릭: 더 최근 날짜
+    if (remote.streak && (!p.streak || String(remote.streak.last || "") > String(p.streak.last || ""))) p.streak = remote.streak;
   }
 };
 
@@ -148,6 +186,27 @@ const API = {
         progress: Store.state.progress
       });
     }, 1500);
+  },
+
+  // 서버 진도 읽기(sid로). 재진입 시 최신본 병합용.
+  async getProgress(sid) {
+    if (!this.enabled || !sid) return null;
+    const r = await this._post("getProgress", { sid });
+    return (r && r.ok) ? (r.progress || null) : null;
+  },
+
+  // 앱을 떠날 때 즉시 서버로 진도 전송(throttle 우회). sendBeacon 우선(언로드에도 도달).
+  flushNow() {
+    if (!this.enabled || !Store.state.student) return;
+    clearTimeout(this._syncT);
+    const payload = JSON.stringify({ action: "saveProgress", sid: Store.state.student.sid, progress: Store.state.progress });
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(this.url, new Blob([payload], { type: "text/plain;charset=utf-8" }));
+      } else {
+        this._post("saveProgress", { sid: Store.state.student.sid, progress: Store.state.progress });
+      }
+    } catch (e) {}
   },
 
   // 섹션 제출 — 시트 기록 + 카톡 자동 전송. 실패 시 큐에 보관.
