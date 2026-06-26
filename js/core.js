@@ -188,13 +188,6 @@ const API = {
     }, 1500);
   },
 
-  // 서버 진도 읽기(sid로). 재진입 시 최신본 병합용.
-  async getProgress(sid) {
-    if (!this.enabled || !sid) return null;
-    const r = await this._post("getProgress", { sid });
-    return (r && r.ok) ? (r.progress || null) : null;
-  },
-
   // 앱을 떠날 때 즉시 서버로 진도 전송(throttle 우회). sendBeacon 우선(언로드에도 도달).
   flushNow() {
     if (!this.enabled || !Store.state.student) return;

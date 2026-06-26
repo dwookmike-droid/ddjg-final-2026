@@ -226,7 +226,7 @@ const Login = {
       const r = await API.login(nm, klass, pin.value);
       btn.disabled = false;
       if (!r.ok) { msg.textContent = r.reason === "pin" ? "PIN이 일치하지 않아요." : "연결에 실패했어요. 다시 시도하세요."; return; }
-      Store.state.student = { name: nm, class: klass, sid: r.sid };
+      Store.state.student = { name: nm, class: klass, sid: r.sid, pin: pin.value };  // pin 저장: 재진입 시 조용히 재동기화
       if (r.progress) Store.mergeProgress(r.progress);  // 서버 진도 병합(기기 동기화·유실 방지)
       Store.save();
       boot2();
@@ -440,11 +440,15 @@ async function boot() {
   Audio2.init();
   if (CONFIG.KAKAO_JS_KEY) loadKakao();
   if (Store.state.student) {
-    // 재진입: 서버 최신 진도를 받아 로컬과 병합(다른 기기서 한 기록 유실 방지)
-    try {
-      const sp = await API.getProgress(Store.state.student.sid);
-      if (sp) { Store.mergeProgress(sp); Store.save(); }
-    } catch (e) {}
+    // 재진입: 저장된 PIN으로 조용히 재로그인 → 서버 최신 진도를 로컬과 병합
+    // (다른 기기서 한 기록 유실 방지. 백엔드 변경 없이 기존 login 엔드포인트 재사용)
+    const stu = Store.state.student;
+    if (stu.pin && API.enabled) {
+      try {
+        const r = await API.login(stu.name, stu.class, stu.pin);
+        if (r && r.ok && r.progress) { Store.mergeProgress(r.progress); Store.save(); }
+      } catch (e) {}
+    }
     boot2();
   } else {
     Login.render();

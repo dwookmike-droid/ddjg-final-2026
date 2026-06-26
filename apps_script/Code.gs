@@ -21,7 +21,6 @@ function doPost(e) {
     switch (body.action) {
       case 'login':        out = apiLogin(body); break;
       case 'saveProgress': out = apiSaveProgress(body); break;
-      case 'getProgress':  out = apiGetProgress(body); break;
       case 'submit':       out = apiSubmit(body); break;
       case 'report':       out = apiReport(body); break;
       default:             out = { ok: false, reason: 'unknown_action' };
@@ -108,10 +107,6 @@ function loadProgress(sid) {
   for (var i = 1; i < data.length; i++)
     if (String(data[i][0]) === sid) { try { return JSON.parse(data[i][1]); } catch (e) { return null; } }
   return null;
-}
-function apiGetProgress(b) {
-  var sid = String(b.sid || ''); if (!sid) return { ok: false };
-  return { ok: true, progress: loadProgress(sid) };   // 재진입 시 서버 최신본 읽기(PIN 불필요·경량)
 }
 function apiSaveProgress(b) {
   var sid = String(b.sid || ''); if (!sid) return { ok: false };

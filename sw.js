@@ -1,9 +1,9 @@
 /* 서비스워커 — 앱 셸 오프라인 캐시 */
-const VER = "ddj-final-v19";
+const VER = "ddj-final-v20";
 const SHELL = [
   ".", "index.html",
-  "css/app.css?v=19",
-  "js/config.js?v=19", "js/core.js?v=19", "js/guide.js?v=19", "js/vocab.js?v=19", "js/reading.js?v=19", "js/quiz.js?v=19", "js/course.js?v=19", "js/app.js?v=19",
+  "css/app.css?v=20",
+  "js/config.js?v=20", "js/core.js?v=20", "js/guide.js?v=20", "js/vocab.js?v=20", "js/reading.js?v=20", "js/quiz.js?v=20", "js/course.js?v=20", "js/app.js?v=20",
   "data/vocab.json", "data/synant.json", "data/reading.json", "data/bank.json", "data/guide.json", "data/wordpoints.json",
   "manifest.webmanifest"
 ];
