@@ -431,6 +431,7 @@ const Settings = {
 
 /* ---------- 부팅 ---------- */
 async function boot() {
+  if (/[?&]admin(\b|=)/.test(location.search)) { Admin.start(); return; }   // 선생님 대시보드
   if (localStorage.getItem("ddj_dark") === "1") document.documentElement.classList.add("dark");
   const fs = localStorage.getItem("ddj_fs"); if (fs) document.documentElement.style.fontSize = fs + "%";
   Store.load();

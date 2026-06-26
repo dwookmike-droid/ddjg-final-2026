@@ -176,6 +176,12 @@ const API = {
     return this._post("login", { name, class: klass, pin });
   },
 
+  // 관리자(선생님) 대시보드 데이터 — 키 검증은 서버에서
+  async admin(key) {
+    if (!this.enabled) return { ok: false, offline: true };
+    return this._post("admin", { key });
+  },
+
   // 진도 저장 — 잦은 호출을 묶어서(throttle) 전송
   syncProgress() {
     if (!this.enabled || !Store.state.student) return;

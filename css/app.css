@@ -147,6 +147,33 @@ html.dark .streak{background:#3a2d18;}
 .usage-item{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;line-height:1.5;}
 .ui-ic{flex-shrink:0;width:22px;text-align:center;}
 
+/* ---------- 선생님 대시보드 ---------- */
+.adm-top{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px;}
+.adm-title{font-size:1.2rem;font-weight:800;}
+.adm-actions{display:flex;gap:6px;}
+.ghost-btn.sm,.primary-btn.sm{padding:7px 12px;font-size:.82rem;}
+.adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 12px;}
+.adm-stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r-s);padding:12px 6px;text-align:center;box-shadow:var(--shadow);}
+.adm-stat-v{font-size:1.3rem;font-weight:800;color:var(--primary);}
+.adm-stat-l{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.adm-controls{display:flex;flex-direction:column;gap:8px;padding:0 16px 10px;}
+.adm-sort{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.84rem;}
+.adm-sortbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-weight:700;color:var(--muted);font-size:.82rem;}
+.adm-sortbtn.on{background:var(--primary);border-color:var(--primary);color:#fff;}
+.adm-table{padding:0 12px 8px;display:flex;flex-direction:column;}
+.adm-row{display:grid;grid-template-columns:1.4fr .6fr .5fr .7fr .6fr 1fr;gap:6px;align-items:center;
+  padding:11px 8px;border-bottom:1px solid var(--line);font-size:.9rem;}
+.adm-head{font-size:.74rem;font-weight:800;color:var(--muted);position:sticky;top:0;background:var(--bg);border-bottom:2px solid var(--line);}
+.adm-c-num,.adm-head .adm-c-num{text-align:center;}
+.adm-c-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.adm-c-cls{color:var(--muted);font-size:.82rem;}
+.adm-c-last{color:var(--muted);font-size:.8rem;text-align:right;}
+.adm-pct{font-weight:800;}
+.adm-pct.good{color:var(--ok);}
+.adm-pct.warn{color:var(--bad);}
+.adm-empty{padding:24px;text-align:center;color:var(--muted);}
+.adm-foot{padding:10px 16px 24px;font-size:.76rem;text-align:center;}
+
 /* ---------- 탭/검색 ---------- */
 .tabs{display:flex;gap:7px;margin-bottom:10px;}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;}

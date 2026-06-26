@@ -23,6 +23,7 @@ function doPost(e) {
       case 'saveProgress': out = apiSaveProgress(body); break;
       case 'submit':       out = apiSubmit(body); break;
       case 'report':       out = apiReport(body); break;
+      case 'admin':        out = apiAdmin(body); break;
       default:             out = { ok: false, reason: 'unknown_action' };
     }
     return json(out);
@@ -139,6 +140,30 @@ function apiSubmit(b) {
   var sent = sendKakaoMemo(msg, 'https://' + (PROP.getProperty('APP_HOST') || ''));
   return { ok: true, kakao: sent };
 }
+
+/* ---------- 관리자(선생님) 대시보드 ---------- */
+function apiAdmin(b) {
+  var key = String(b.key || '');
+  var admin = PROP.getProperty('ADMIN_KEY');
+  if (!admin || key !== admin) return { ok: false, reason: 'auth' };
+  // 학생 목록 (pin_hash 제외)
+  var st = sheet('students', ['sid', 'name', 'class', 'pin_hash', 'created', 'last_login']).getDataRange().getValues();
+  var students = [];
+  for (var i = 1; i < st.length; i++) {
+    if (!st[i][0]) continue;
+    students.push({ sid: String(st[i][0]), name: st[i][1], 'class': st[i][2], created: st[i][4], last_login: st[i][5] });
+  }
+  // 결과 (오답 본문 제외 — 가벼운 요약만)
+  var rs = sheet('results', ['ts', 'sid', 'name', 'class', 'section', 'kind', 'score', 'total', 'pct', 'duration_s', 'wrong']).getDataRange().getValues();
+  var results = [];
+  for (var j = 1; j < rs.length; j++) {
+    if (!rs[j][1]) continue;
+    results.push({ ts: rs[j][0], sid: String(rs[j][1]), name: rs[j][2], 'class': rs[j][3], section: rs[j][4], kind: rs[j][5], score: rs[j][6], total: rs[j][7], pct: rs[j][8] });
+  }
+  return { ok: true, students: students, results: results, now: new Date() };
+}
+// 관리자 키 설정(1회 실행) — 따옴표 안 값을 원하는 키로 바꾼 뒤 실행
+function setAdminKey() { PROP.setProperty('ADMIN_KEY', 'CHANGE_ME_관리자키'); Logger.log('ADMIN_KEY 설정됨'); }
 
 /* ---------- 문항 오류 신고 ---------- */
 function apiReport(b) {
